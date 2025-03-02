@@ -13,7 +13,12 @@ Follow the steps below to set up both the frontend and backend of this project.
    ```env
    VITE_BACKEND_URL_LOCAL=http://localhost:5173
    VITE_BACKEND_URL_PRODUCTION=https://quiz-1-u3ch.onrender.com
-3. Install dependencies=npm install
+3. Copy and paste following commands:
+     
+    ``env
+    npm install
+    npm run dev 
+  
     
 
 4. Start the development server:
