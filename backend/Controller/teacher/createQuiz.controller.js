@@ -114,6 +114,36 @@ export const getAttemptyId = async (req, res) => {
         res.status(500).json({ error: "Failed to fetch attempt" });
     }
 };
+export const getAttemptRank = async (req, res) => {
+    try {
+        const { attemptId, quizId } = req.query;
+
+        // ✅ Validate input
+        if (!attemptId || !quizId) {
+            return res.status(400).json({ error: "Attempt ID and Quiz ID are required" });
+        }
+
+        // ✅ Fetch all attempts for the quiz, sorted by score in descending order
+        const attempts = await prisma.attempt.findMany({
+            where: { quizId },
+            orderBy: { score: "desc" }, // 🔥 Sorting high to low
+            select: { id: true, score: true }, // Only fetching required fields
+        });
+
+        // ✅ Find the rank of the given attempt
+        const rank = attempts.findIndex((attempt) => attempt.id === attemptId) + 1;
+
+        // ✅ If attempt is not found in the quiz attempts
+        if (rank === 0) {
+            return res.status(404).json({ error: "Attempt not found in this quiz" });
+        }
+
+        res.status(200).json({ rank });
+    } catch (error) {
+        console.error("Error fetching attempt rank:", error);
+        res.status(500).json({ error: "Failed to fetch attempt rank" });
+    }
+};
 
 export const createquestion=async(req,res)=>{
     const { quizId } = req.query;

@@ -10,6 +10,7 @@ const StudentResult = () => {
     const [responses, setResponses] = useState({});
     const [correctAnswers, setCorrectAnswers] = useState({});
     const [score, setScore] = useState(0);
+    const [rank, setRank] = useState(0);
     const [quizName, setQuizName] = useState("");
 
     useEffect(() => {
@@ -25,7 +26,19 @@ const StudentResult = () => {
                     { withCredentials: true }
                 );
 
-                console.log(attemptRes); `   `
+                try {
+                    const rank = await axios.get(
+                        `${backendUrl}/api/auth/teacher/homepage/getattemptbyrank?attemptId=${attemptId}&quizId=${quizId}`,
+                        { withCredentials: true }
+                    );
+                    // console.log("rank",rank.data.rank);}
+                    setRank(rank.data.rank);
+                }
+
+                catch (e) {
+                    console.log(e);
+                }
+                console.log(attemptRes);
 
                 setQuizName(quizRes.data.quizName);
                 setQuestions(quizRes.data.questions || []);
@@ -57,6 +70,7 @@ const StudentResult = () => {
             <h1 className="text-3xl font-bold text-center mb-4">Quiz Results</h1>
             <h2 className="text-xl text-center">{quizName}</h2>
             <h3 className="text-lg text-center mt-2">Your Score: {score} / {questions.length}</h3>
+            <h3 className="text-lg text-center mt-2">Your Rank: {rank}</h3>
 
             <div className="mt-6 border p-4 rounded-lg shadow-lg">
                 {questions.map((question, index) => (
