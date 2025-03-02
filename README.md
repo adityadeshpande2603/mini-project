@@ -15,11 +15,23 @@ Follow the steps below to set up both the frontend and backend of this project.
    VITE_BACKEND_URL_PRODUCTION=https://quiz-1-u3ch.onrender.com
 3. Run the following commands to set up the project:
 
-```sh
-npm install
-npm run dev
+   ```sh
+    npm install
+    npm run dev
 
+ ---
 
+## **Backend Setup**   
 
+1. Navigate to the frontend directory and create a `.env` file.
+2. Copy and paste the following environment variables into the `.env` file:
 
+   ```env
+   DATABASE_URL=<your-mongodb-connection-string>
+   JWT_SECRETE_KEY=<your-secret-key>  
+   
+3. Run the following commands to set up the project:
 
+   ```sh
+    npm install
+    npm run dev
