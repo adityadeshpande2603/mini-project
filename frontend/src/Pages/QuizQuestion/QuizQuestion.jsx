@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Question from "../../Components/Question/Question";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
 
@@ -9,6 +9,8 @@ const QuizQuestion = () => {
     const [quizName, setQuizName] = useState("");
     const [isEditing, setIsEditing] = useState(false);
     const [questions, setQuestions] = useState([]); // ✅ Store fetched questions
+    const navigate=useNavigate();
+    
 
     useEffect(() => {
         const fetchQuiz = async () => {
@@ -17,7 +19,7 @@ const QuizQuestion = () => {
                     `${backendUrl}/api/auth/teacher/homepage/getquizbyid?quizId=${quizId}`,
                     { withCredentials: true }
                 );
-
+   console.log("reeeees",res);
                 setQuizName(res.data.quizName);
                 setQuestions(res.data.questions || []); // ✅ Store existing questions
             } catch (error) {
@@ -76,7 +78,7 @@ const QuizQuestion = () => {
             </div>
 
             {/* ✅ Edit & Save Buttons */}
-            <div className="mt-2">
+            <div className="mt-2 flex justify-between items-center">
                 {isEditing ? (
                     <button
                         className="h-10 w-20 bg-green-500 text-white rounded-md"
@@ -92,6 +94,10 @@ const QuizQuestion = () => {
                         Edit
                     </button>
                 )}
+
+                <button className="h-10 w-28 bg-green-500 text-white rounded-md" onClick={()=>{
+                   navigate(`/teacher/homepage/quizresult/${quizId}`)
+                }}>View Result</button>
             </div>
 
             {/* ✅ Question Section (Rendering Existing & New Questions) */}

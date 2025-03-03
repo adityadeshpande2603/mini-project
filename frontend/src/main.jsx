@@ -24,6 +24,7 @@ import StudentExamWindow from './studentPage/studentExamWindow/StudentExamWindow
 import StudentResult from './studentPage/StudentResult/StudentResult.jsx';
 import StudentHomePage from './studentPage/StudentHomePage/StudentHomePage.jsx';
 import { StudentRequireAuth } from './Pages/RequireAuth/StudentRequireAuth.jsx';
+import TeacherResult from './Pages/TeacherResult/TeacherResult.jsx';
 
 const router = createBrowserRouter([
   {
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
           {
             path: "/teacher/homepage/quizquestion/:quizId",
             element: <QuizQuestion />
+          },
+          {
+            path: "/teacher/homepage/quizresult/:quizId",
+            element: <TeacherResult />
           }
         ]
       },
