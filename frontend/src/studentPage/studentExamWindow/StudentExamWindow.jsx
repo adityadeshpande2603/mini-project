@@ -224,7 +224,12 @@ const StudentExamWindow = () => {
 
                     <div className="flex justify-between mt-6">
                         <button className="quiz-button" disabled={currentQuestionIndex === 0} onClick={() => setCurrentQuestionIndex(currentQuestionIndex - 1)}>Previous</button>
-                        <button className="quiz-button bg-red-500 hover:bg-red-600" onClick={handleSubmit}>Submit</button>
+                        <button
+                            className="quiz-button bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-400"
+                            onClick={handleSubmit}
+                        >
+                            Submit
+                        </button>
                         <button className="quiz-button" disabled={currentQuestionIndex === questions.length - 1} onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}>Next</button>
                     </div>
                 </div>
