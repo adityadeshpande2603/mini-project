@@ -21,12 +21,43 @@ const StudentExamWindow = () => {
     const [endTime, setEndTime] = useState();
     const [date, setDate] = useState();
 
+
     const { currentUser } = useContext(AuthContext)
 
-
+    let alreadyCheck = false;
 
     useEffect(() => {
         const fetchQuestions = async () => {
+
+
+            try {
+
+                const res = await axios.get(
+                    `${backendUrl}/api/auth/student/getstudentbyid?studentId=${currentUser.id}`,
+                    { withCredentials: true }
+                );
+
+                console.log("okkk")
+
+                const studentData = res.data; // Extract student data
+                const quizIdToCheck = quizId; // Replace this with the current quiz ID
+
+                // Check if the quizId is already present in the student's attempts
+                const hasAttempted = studentData.attempts.some(attempt => attempt.quizId === quizIdToCheck);
+
+                if (hasAttempted && !alreadyCheck) {
+                    console.log("Student has already attempted this quiz.");
+                    alreadyCheck = true;
+
+                    alert("You have already attempted this quiz.");
+                    navigate("/student/homepage")
+                    return; // Stop further execution
+                }
+
+                console.log("Student is eligible to take the quiz.");
+            } catch (error) {
+                console.error("Error fetching student data:", error);
+            }
             try {
                 const res = await axios.get(
                     `${backendUrl}/api/auth/teacher/homepage/getquizbyid?quizId=${quizId}`,
