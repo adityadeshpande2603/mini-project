@@ -38,6 +38,7 @@ model Questions {
   optionD       String
   correctAnswer String
   difficulty    String
+  images        String[]
   quiz          Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
   quizId        String @db.ObjectId
   responses     Response[] 

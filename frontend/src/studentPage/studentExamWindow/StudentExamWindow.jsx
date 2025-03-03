@@ -20,6 +20,7 @@ const StudentExamWindow = () => {
     const [startTime, setStartTime] = useState();
     const [endTime, setEndTime] = useState();
     const [date, setDate] = useState();
+    const [image, setImage] = useState([]);
 
 
     const { currentUser } = useContext(AuthContext)
@@ -63,13 +64,14 @@ const StudentExamWindow = () => {
                     `${backendUrl}/api/auth/teacher/homepage/getquizbyid?quizId=${quizId}`,
                     { withCredentials: true }
                 );
-
+                console.log("dadadad", res.data);
                 setQuizName(res.data.quizName);
                 setQuestions(res.data.questions || []);
                 setActive(res.data.isActive);
                 setStartTime(res.data.startTime);
                 setEndTime(res.data.endTime);
                 setDate(res.data.date);
+
 
                 const answers = {};
                 res.data.questions.forEach((question) => {
@@ -209,6 +211,11 @@ const StudentExamWindow = () => {
                 <div className="w-3/4 p-6 flex flex-col">
                     <h2 className="text-xl font-bold mb-2">Question {currentQuestionIndex + 1}</h2>
                     <p className="mb-4 text-lg">{currentQuestion.question}</p>
+                    <div className="flex flex-wrap ">
+                    {currentQuestion.images?.map((image, index) => (
+                        <img key={index} src={image} alt={`Image ${index + 1}`} className="h-72  object-cover rounded-md border m-5" />
+                    ))}
+                    </div>
 
                     <div className="options space-y-3">
                         {["optionA", "optionB", "optionC", "optionD"].map((optionKey) => (

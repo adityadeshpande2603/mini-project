@@ -104,6 +104,7 @@ const QuizQuestion = () => {
             <div className="questions overflow-auto">
                 {questions.map((question) => (
                     <Question
+                        uploadedImage={question.images}
                         key={question.fakeId}
                         divId={question.id}
                         removeDiv={removeQuestion}

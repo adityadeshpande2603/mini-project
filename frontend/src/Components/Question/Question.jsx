@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import CloudinaryUploadWidget from "../CloudinaryUploadWidget/CloudinaryUploadWidget";
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
 
-const Question = ({ divId, removeDiv, addDiv, editQuestion }) => {
+const Question = ({ divId, removeDiv, addDiv, editQuestion, uploadedImage }) => {
     const { quizId } = useParams();
     const [questionId, setQuestionId] = useState(null);
+    const [images, setImages] = useState([]);
 
     const [formData, setFormData] = useState({
         question: "",
@@ -62,6 +64,10 @@ const Question = ({ divId, removeDiv, addDiv, editQuestion }) => {
         }
 
     }
+    const payload = {
+        ...formData,
+        images // Include uploaded image URLs in request
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -71,7 +77,7 @@ const Question = ({ divId, removeDiv, addDiv, editQuestion }) => {
             try {
                 await axios.put(`${backendUrl}/api/auth/teacher/homepage/updatequestion`, {
                     questionId,
-                    ...formData
+                    ...payload
                 }, { withCredentials: true });
                 console.log("Question Updated!");
             } catch (e) {
@@ -81,7 +87,7 @@ const Question = ({ divId, removeDiv, addDiv, editQuestion }) => {
             try {
                 const res = await axios.post(
                     `${backendUrl}/api/auth/teacher/homepage/createquestion?quizId=${quizId}`,
-                    formData,
+                    payload,
                     { withCredentials: true }
                 );
                 console.log("Success:", res.data);
@@ -96,6 +102,13 @@ const Question = ({ divId, removeDiv, addDiv, editQuestion }) => {
         <div>
             <form onSubmit={handleSubmit}>
                 <div className="border-solid border-black border-2 rounded-2xl mt-4 p-4">
+                    {(uploadedImage?.length > 0 || images.length > 0) && (
+                        <div className="flex gap-2 mb-3 flex-wrap">
+                            {[...(uploadedImage ?? []), ...(images ?? [])].map((image, index) => (
+                                <img key={index} src={image} alt={`Uploaded ${index + 1}`} className="h-48  object-cover rounded-md border" />
+                            ))}
+                        </div>
+                    )}
                     <div className="flex">
                         <textarea
                             name="question"
@@ -116,6 +129,8 @@ const Question = ({ divId, removeDiv, addDiv, editQuestion }) => {
                             <option value="Hard">Hard</option>
                         </select>
                     </div>
+
+
 
                     {/* Options Section */}
                     <div className="options mt-4">
@@ -148,8 +163,18 @@ const Question = ({ divId, removeDiv, addDiv, editQuestion }) => {
                         Remove
                     </button>
                 </div>
-            </form>
-        </div>
+            </form >
+            <CloudinaryUploadWidget
+                uwConfig={{
+                    cloudName: "adityadeshpande",
+                    uploadPreset: "MiniProject",
+                    multiple: true,
+                    folder: "posts",
+                    cropping: false,
+                    quality: "auto",
+                    format: "auto"
+                }} setState={setImages}></CloudinaryUploadWidget>
+        </div >
     );
 };
 

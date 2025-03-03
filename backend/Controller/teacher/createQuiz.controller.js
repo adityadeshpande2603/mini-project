@@ -150,7 +150,7 @@ export const getAttemptRank = async (req, res) => {
 export const createquestion=async(req,res)=>{
     const { quizId } = req.query;
     try{
-        const {question, optionA,optionB,optionC,optionD,correctAnswer,difficulty}=req.body;
+        const {question, optionA,optionB,optionC,optionD,correctAnswer,difficulty,images}=req.body;
 
         const newQuestion=await prisma.questions.create({
             data:{
@@ -159,6 +159,7 @@ export const createquestion=async(req,res)=>{
                 optionB,
                 optionC,
                 optionD,
+                images,
                 correctAnswer,
                 difficulty,
                 quizId

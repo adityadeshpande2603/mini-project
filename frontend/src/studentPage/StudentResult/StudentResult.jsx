@@ -75,6 +75,13 @@ const StudentResult = () => {
             <div className="mt-6 border p-4 rounded-lg shadow-lg">
                 {questions.map((question, index) => (
                     <div key={question.id} className="mb-4 p-4 border-b">
+                        <div className="flex">
+                            {question.images?.map((image, index) => (
+                                <img key={index} src={image} alt={`Image ${index + 1}`}
+
+                                    className="h-72  object-cover rounded-md border m-5" />
+                            ))}
+                        </div>
                         <p className="font-semibold">{index + 1}. {question.question}</p>
                         <div className="mt-2">
                             {["optionA", "optionB", "optionC", "optionD"].map((option) => (
@@ -99,7 +106,7 @@ const StudentResult = () => {
             </div>
 
             <div className="text-center mt-6">
-                <button className="px-6 py-3 bg-blue-500 text-white rounded" onClick={() => { isteacher==="true" ? navigate("/teacher/homepage") : navigate("/student/homepage") }}>
+                <button className="px-6 py-3 bg-blue-500 text-white rounded" onClick={() => { isteacher === "true" ? navigate("/teacher/homepage") : navigate("/student/homepage") }}>
                     Go to Dashboard
                 </button>
             </div>
