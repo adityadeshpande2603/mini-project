@@ -102,7 +102,7 @@ const StudentHomePage = () => {
             <div className="flex flex-wrap">
                 {attempts.length > 0 ? (
                     attempts.map((attempt, index) => (
-                        <Link key={index} to={`/student/result/${attempt.quizId}/${attempt.id}`}>
+                        <Link key={index} to={`/student/result/${attempt.quizId}/${attempt.id}/false`}>
                             <StudentCard
                                 quizId={attempt.quizId}
                                 score={attempt.score}

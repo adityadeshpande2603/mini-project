@@ -68,7 +68,7 @@ const TeacherResult = () => {
                         {attempts.map((attempt, index) => (
                             <tr key={index} 
                             className="text-center hover:cursor-pointer hover:bg-yellow-100" 
-                            onClick={() => navigate(`/student/result/${quizId}/${attempt.id}`)}
+                            onClick={() => navigate(`/student/result/${quizId}/${attempt.id}/true`)}
                         >
                                 <td className="border border-gray-400 px-4 py-2">{attempt.studentId}</td>
                                 <td className="border border-gray-400 px-4 py-2">{attempt.studentName}</td>

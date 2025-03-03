@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
 
 const StudentResult = () => {
-    const { quizId, attemptId } = useParams();  // Fetch attemptId from URL params
+    const { quizId, attemptId, isteacher } = useParams();  // Fetch attemptId from URL params
     const navigate = useNavigate();
     const [questions, setQuestions] = useState([]);
     const [responses, setResponses] = useState({});
@@ -99,7 +99,7 @@ const StudentResult = () => {
             </div>
 
             <div className="text-center mt-6">
-                <button className="px-6 py-3 bg-blue-500 text-white rounded" onClick={() => navigate("/student/homepage")}>
+                <button className="px-6 py-3 bg-blue-500 text-white rounded" onClick={() => { isteacher==="true" ? navigate("/teacher/homepage") : navigate("/student/homepage") }}>
                     Go to Dashboard
                 </button>
             </div>

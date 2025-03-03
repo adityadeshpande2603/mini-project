@@ -156,7 +156,7 @@ const StudentExamWindow = () => {
             );
 
             alert("Quiz Submitted Successfully!");
-            navigate(`/student/result/${quizId}/${res.data.id}`);
+            navigate(`/student/result/${quizId}/${res.data.id}/false`);
         } catch (error) {
             console.error("Error submitting quiz:", error);
         }
