@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import moment from "moment-timezone";
 import { AuthContext } from "../../../lib/authContext/AuthContext";
+import ImagePopup from "../../Components/ImagePopUp/ImagePopup";
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
 
 const StudentExamWindow = () => {
@@ -21,6 +22,7 @@ const StudentExamWindow = () => {
     const [endTime, setEndTime] = useState();
     const [date, setDate] = useState();
     const [image, setImage] = useState([]);
+    const [isOpen,SetIsOpen]=useState(false);
 
 
     const { currentUser } = useContext(AuthContext)
@@ -109,6 +111,7 @@ const StudentExamWindow = () => {
         }, 1000);
     };
 
+   
     const handleOptionSelect = (questionId, selectedOption) => {
         setResponses((prev) => ({
             ...prev,
@@ -213,7 +216,9 @@ const StudentExamWindow = () => {
                     <p className="mb-4 text-lg">{currentQuestion.question}</p>
                     <div className="flex flex-wrap ">
                     {currentQuestion.images?.map((image, index) => (
-                        <img key={index} src={image} alt={`Image ${index + 1}`} className="h-72  object-cover rounded-md border m-5" />
+                        // <img key={index} src={image} alt={`Image ${index + 1}`} className="h-72  object-cover rounded-md border m-5" />
+                        <ImagePopup index={index} image_url={image}   ></ImagePopup>
+                        // {console.log(isOpen)}
                     ))}
                     </div>
 

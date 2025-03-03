@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import ImagePopup from "../../Components/ImagePopUp/ImagePopup";
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
 
 const StudentResult = () => {
@@ -77,9 +78,10 @@ const StudentResult = () => {
                     <div key={question.id} className="mb-4 p-4 border-b">
                         <div className="flex">
                             {question.images?.map((image, index) => (
-                                <img key={index} src={image} alt={`Image ${index + 1}`}
+                                // <img key={index} src={image} alt={`Image ${index + 1}`}
 
-                                    className="h-72  object-cover rounded-md border m-5" />
+                                //     className="h-72  object-cover rounded-md border m-5" />
+                                <ImagePopup index={index} image_url={image}   ></ImagePopup>
                             ))}
                         </div>
                         <p className="font-semibold">{index + 1}. {question.question}</p>

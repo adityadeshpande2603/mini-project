@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import CloudinaryUploadWidget from "../CloudinaryUploadWidget/CloudinaryUploadWidget";
+import ImagePopup from "../ImagePopUp/ImagePopup";
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
 
 const Question = ({ divId, removeDiv, addDiv, editQuestion, uploadedImage }) => {
@@ -105,7 +106,8 @@ const Question = ({ divId, removeDiv, addDiv, editQuestion, uploadedImage }) => 
                     {(uploadedImage?.length > 0 || images.length > 0) && (
                         <div className="flex gap-2 mb-3 flex-wrap">
                             {[...(uploadedImage ?? []), ...(images ?? [])].map((image, index) => (
-                                <img key={index} src={image} alt={`Uploaded ${index + 1}`} className="h-48  object-cover rounded-md border" />
+                                // <img key={index} src={image} alt={`Uploaded ${index + 1}`} className="h-48  object-cover rounded-md border" />
+                                <ImagePopup index={index} image_url={image}   ></ImagePopup>
                             ))}
                         </div>
                     )}
