@@ -11,7 +11,8 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.en
 const TeacherHomePage = () => {
     const [showCreateQuiz, setShowCreateQuiz] = useState(false);
     const [quizzes, setQuizzes] = useState([]); // Store quizzes
-    const { currentUser } = useContext(AuthContext);
+    const { currentUser ,setCurrentUser} = useContext(AuthContext);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     useEffect(() => {
         const fetchQuizzes = async () => {
@@ -65,6 +66,15 @@ const TeacherHomePage = () => {
     const handleHideCreateQuiz = () => {
         setShowCreateQuiz(false);
     };
+    const handleLogout = async () => {
+        try {
+            await axios.post(`${backendUrl}/api/auth/teacher/logout`, {}, { withCredentials: true });
+            setCurrentUser(null);
+            navigate("/teacher/signin");
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
+    };
 
     return (
         <div className="p-4 h-full w-full relative">
@@ -80,7 +90,19 @@ const TeacherHomePage = () => {
                         className="size-16 cursor-pointer"
                         onClick={handleShowCreateQuiz}
                     />
-                    <img src="/Avatar.jpg" alt="User Avatar" className="size-16 rounded-full m-4" />
+                    <img src="/Avatar.jpg" alt="User Avatar" className="size-16 rounded-full m-4" onClick={() => {
+                        setDropdownOpen((prev) => !prev);
+                    }} />
+                    {dropdownOpen && (
+                        <div className="absolute right-0 top-20 mt-2 w-40 bg-white border rounded-lg shadow-lg">
+                            <button
+                                onClick={handleLogout}
+                                className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700"
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
 

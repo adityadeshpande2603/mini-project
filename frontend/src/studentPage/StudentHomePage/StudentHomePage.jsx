@@ -8,8 +8,10 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.en
 const StudentHomePage = () => {
     const [attempts, setAttempts] = useState([]);
     const [quizCode, setQuizCode] = useState(""); // State for input value
-    const { currentUser } = useContext(AuthContext);
+    const { currentUser,setCurrentUser } = useContext(AuthContext);
     const navigate = useNavigate();
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    // const { currentUser } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchQuizzes = async () => {
@@ -40,6 +42,15 @@ const StudentHomePage = () => {
         }
         navigate(`/student/quiz/${quizCode}`);
     };
+    const handleLogout = async () => {
+        try {
+            await axios.post(`${backendUrl}/api/auth/student/logout`, {}, { withCredentials: true });
+            setCurrentUser(null);
+            navigate("/student/signin");
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
+    };
 
     return (
         <div className="p-4 h-full w-full relative">
@@ -48,8 +59,9 @@ const StudentHomePage = () => {
                 <Link to="/">
                     <img src="/quiz.jpg" alt="Quiz" className="h-20" />
                 </Link>
-                <form 
-                    className="flex items-center bg-gray-100 p-6 rounded-lg shadow-lg justify-center"
+                <div className="flex ">
+                <form
+                    className="flex items-center bg-gray-100 p-6 rounded-lg shadow-lg justify-center "
                     onSubmit={handleQuizAttempt} // Attach function to form submission
                 >
                     <h1 className="text-xl font-semibold text-gray-700 mx-3">Attempt Quiz</h1>
@@ -68,7 +80,22 @@ const StudentHomePage = () => {
                     >
                         Attempt
                     </button>
+
                 </form>
+                <img src="/Avatar.jpg" alt="User Avatar" className="size-16 rounded-full m-4" onClick={()=>{
+                    setDropdownOpen((prev)=>!prev);
+                }} />
+                {dropdownOpen && (
+                    <div className="absolute right-0 top-20 mt-2 w-40 bg-white border rounded-lg shadow-lg">
+                        <button
+                            onClick={handleLogout}
+                            className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700"
+                        >
+                            Logout
+                        </button>
+                    </div>
+                )}
+                </div>
             </div>
 
             {/* Quizzes Attempted */}
