@@ -169,7 +169,7 @@ const StudentExamWindow = () => {
 
     if (!active) {
         return (
-            <div className="flex justify-center items-center h-screen flex-col">
+            <div className="flex justify-center items-center h-screen flex-col  bg-gradient-to-br from-gray-900 to-black text-white">
                 <h2 className="text-2xl font-bold text-red-600">This quiz is not active yet!</h2>
                 <h2 className="text-lg font-bold">{timeLeft}</h2>
             </div>
@@ -178,7 +178,7 @@ const StudentExamWindow = () => {
 
     if (overQuiz) {
         return (
-            <div className="flex justify-center items-center h-screen flex-col">
+            <div className="flex justify-center items-center h-screen flex-col bg-gradient-to-br from-gray-900 to-black text-white">
                 <h2 className="text-2xl font-bold text-red-600">Quiz Over!</h2>
                 <h2 className="text-lg font-bold">Your responses have been submitted.</h2>
             </div>
