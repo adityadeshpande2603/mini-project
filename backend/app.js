@@ -1,4 +1,9 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
+
 import express from "express";
+
 import cookieParser from "cookie-parser";
 import teacherAuthRouter from "./routes/teacher/teacherAuthRoute.js"
 import studentAuthRouter from "./routes/student/studentAuthRoute.js"
