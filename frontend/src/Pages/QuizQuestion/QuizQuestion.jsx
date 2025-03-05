@@ -66,12 +66,14 @@ const QuizQuestion = () => {
 
                 {/* ✅ Toggle between text and textarea */}
                 {isEditing ? (
-                    <textarea
-                        className="w-full h-14 p-2 border border-gray-300 rounded-md"
-                        rows={3}
-                        value={quizName}
-                        onChange={(e) => setQuizName(e.target.value)}
-                    />
+                 <textarea
+                 className="w-full h-14 p-2 border border-gray-300 rounded-md text-black placeholder-gray-400"
+                 rows={3}
+                 value={quizName}
+                 onChange={(e) => setQuizName(e.target.value)}
+                 placeholder="Enter quiz name"
+             />
+             
                 ) : (
                     <p className="text-lg font-medium">{quizName || "No name set"}</p>
                 )}
