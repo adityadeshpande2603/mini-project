@@ -22,7 +22,7 @@ const StudentExamWindow = () => {
     const [endTime, setEndTime] = useState();
     const [date, setDate] = useState();
     const [image, setImage] = useState([]);
-    const [isOpen,SetIsOpen]=useState(false);
+    const [isOpen, SetIsOpen] = useState(false);
 
 
     const { currentUser } = useContext(AuthContext)
@@ -111,7 +111,7 @@ const StudentExamWindow = () => {
         }, 1000);
     };
 
-   
+
     const handleOptionSelect = (questionId, selectedOption) => {
         setResponses((prev) => ({
             ...prev,
@@ -188,15 +188,21 @@ const StudentExamWindow = () => {
     const currentQuestion = questions[currentQuestionIndex];
 
     return (
-        <div className="exam-container flex flex-col h-screen">
-            <div className="flex justify-between items-center px-6 py-3 bg-gray-200">
+        <div className="exam-container flex flex-col h-screen bg-blue-950 bg-gradient-to-br from-gray-900 to-black text-white">
+            <div className="flex justify-between items-center px-6 py-3 bg-gray-800">
                 <h2 className="text-lg font-bold">{timeLeft}</h2>
                 <h2 className="text-lg font-bold">{quizName}</h2>
-                <h2 className="text-lg font-bold">Question {currentQuestionIndex + 1} of {questions.length}</h2>
+                {/* <h2 className="text-lg font-bold">Question {currentQuestionIndex + 1} of {questions.length}</h2> */}
+                <button
+                    className="quiz-button bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-400"
+                    onClick={handleSubmit}
+                >
+                    Submit
+                </button>
             </div>
 
             <div className="flex flex-1">
-                <div className="w-1/4 p-4 border-r bg-gray-100 space-y-3">
+                <div className="w-1/4 p-4 border-r bg-gray-800 space-y-3">
                     <h2 className="text-xl font-bold mb-4">Quiz Navigation</h2>
                     <div className="grid grid-cols-5 gap-2">
                         {questions.map((q, index) => (
@@ -211,22 +217,25 @@ const StudentExamWindow = () => {
                     </div>
                 </div>
 
-                <div className="w-3/4 p-6 flex flex-col">
+                <div className="w-3/4 p-6 flex flex-col overflow-auto h-[90vh]">
                     <h2 className="text-xl font-bold mb-2">Question {currentQuestionIndex + 1}</h2>
                     <p className="mb-4 text-lg">{currentQuestion.question}</p>
                     <div className="flex flex-wrap ">
-                    {currentQuestion.images?.map((image, index) => (
-                        // <img key={index} src={image} alt={`Image ${index + 1}`} className="h-72  object-cover rounded-md border m-5" />
-                        <ImagePopup index={index} image_url={image}   ></ImagePopup>
-                        // {console.log(isOpen)}
-                    ))}
+                        {currentQuestion.images?.map((image, index) => (
+                            // <img key={index} src={image} alt={`Image ${index + 1}`} className="h-72  object-cover rounded-md border m-5" />
+                            <ImagePopup index={index} image_url={image}   ></ImagePopup>
+                            // {console.log(isOpen)}
+                        ))}
                     </div>
 
-                    <div className="options space-y-3">
+                    <div className="options space-y-3 ">
                         {["optionA", "optionB", "optionC", "optionD"].map((optionKey) => (
                             <button
                                 key={optionKey}
-                                className={`w-full p-3 text-left border rounded-md hover:bg-blue-100 ${responses[currentQuestion.id] === currentQuestion[optionKey] ? "bg-blue-200" : "bg-white"}`}
+                                className={`w-full p-3 text-left border rounded-md text-black transition duration-300 ease-in-out hover:bg-gradient-to-r from-green-600 to-green-800 ${responses[currentQuestion.id] === currentQuestion[optionKey]
+                                    ? "bg-gradient-to-r from-green-600 to-green-800 text-white"
+                                    : "bg-white"
+                                    }`}
                                 onClick={() => handleOptionSelect(currentQuestion.id, currentQuestion[optionKey])}
                             >
                                 {currentQuestion[optionKey]}
@@ -235,14 +244,34 @@ const StudentExamWindow = () => {
                     </div>
 
                     <div className="flex justify-between mt-6">
-                        <button className="quiz-button" disabled={currentQuestionIndex === 0} onClick={() => setCurrentQuestionIndex(currentQuestionIndex - 1)}>Previous</button>
                         <button
+                            className={`px-6 py-3 rounded-lg font-semibold text-white transition duration-300 ease-in-out shadow-md 
+  ${currentQuestionIndex === 0
+                                    ? "bg-gray-400 cursor-not-allowed"
+                                    : "bg-purple-600 hover:bg-purple-700 active:scale-95 focus:ring-2 focus:ring-purple-400"
+                                }`}
+                            disabled={currentQuestionIndex === 0}
+                            onClick={() => setCurrentQuestionIndex(currentQuestionIndex - 1)}
+                        >
+                            Previous
+                        </button>
+                        {/* <button
                             className="quiz-button bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-400"
                             onClick={handleSubmit}
                         >
                             Submit
+                        </button> */}
+                        <button
+                            className={`px-6 py-3 rounded-lg font-semibold text-white transition duration-300 ease-in-out shadow-md 
+  ${currentQuestionIndex === questions.length - 1
+                                    ? "bg-gray-400 cursor-not-allowed"
+                                    : "bg-blue-600 hover:bg-blue-700 active:scale-95 focus:ring-2 focus:ring-blue-400"
+                                }`}
+                            disabled={currentQuestionIndex === questions.length - 1}
+                            onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}
+                        >
+                            Next
                         </button>
-                        <button className="quiz-button" disabled={currentQuestionIndex === questions.length - 1} onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}>Next</button>
                     </div>
                 </div>
             </div>
