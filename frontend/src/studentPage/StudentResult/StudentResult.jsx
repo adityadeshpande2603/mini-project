@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import ImagePopup from "../../Components/ImagePopUp/ImagePopup";
+
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
 
 const StudentResult = () => {
-    const { quizId, attemptId, isteacher } = useParams();  // Fetch attemptId from URL params
+    const { quizId, attemptId, isteacher } = useParams();
     const navigate = useNavigate();
     const [questions, setQuestions] = useState([]);
     const [responses, setResponses] = useState({});
@@ -28,18 +29,14 @@ const StudentResult = () => {
                 );
 
                 try {
-                    const rank = await axios.get(
+                    const rankRes = await axios.get(
                         `${backendUrl}/api/auth/teacher/homepage/getattemptbyrank?attemptId=${attemptId}&quizId=${quizId}`,
                         { withCredentials: true }
                     );
-                    // console.log("rank",rank.data.rank);}
-                    setRank(rank.data.rank);
-                }
-
-                catch (e) {
+                    setRank(rankRes.data.rank);
+                } catch (e) {
                     console.log(e);
                 }
-                console.log(attemptRes);
 
                 setQuizName(quizRes.data.quizName);
                 setQuestions(quizRes.data.questions || []);
@@ -67,39 +64,57 @@ const StudentResult = () => {
     }, [quizId, attemptId]);
 
     return (
-        <div className="p-6">
-            <h1 className="text-3xl font-bold text-center mb-4">Quiz Results</h1>
-            <h2 className="text-xl text-center">{quizName}</h2>
-            <h3 className="text-lg text-center mt-2">Your Score: {score} / {questions.length}</h3>
-            <h3 className="text-lg text-center mt-2">Your Rank: {rank}</h3>
+        <div className="p-6 bg-gray-900 min-h-screen text-white">
+            <h1 className="text-3xl font-bold text-center mb-4 text-yellow-400">Quiz Results</h1>
+            <h2 className="text-xl text-center text-gray-300">{quizName}</h2>
+            <h3 className="text-lg text-center mt-2 text-gray-400">
+                Your Score: <span className="font-bold text-yellow-400">{score} / {questions.length}</span>
+            </h3>
+            <h3 className="text-lg text-center mt-2 text-gray-400">
+                Your Rank: <span className="font-bold text-yellow-400">{rank}</span>
+            </h3>
 
-            <div className="mt-6 border p-4 rounded-lg shadow-lg">
+            <div className="mt-6 border border-gray-700 p-4 rounded-lg shadow-lg bg-gray-800">
                 {questions.map((question, index) => (
-                    <div key={question.id} className="mb-4 p-4 border-b">
-                        <div className="flex">
-                            {question.images?.map((image, index) => (
-                                // <img key={index} src={image} alt={`Image ${index + 1}`}
-
-                                //     className="h-72  object-cover rounded-md border m-5" />
-                                <ImagePopup index={index} image_url={image}   ></ImagePopup>
+                    <div key={question.id} className="mb-6 p-4 border-b border-gray-700">
+                        <div className="flex flex-wrap gap-4">
+                            {question.images?.map((image, idx) => (
+                                <ImagePopup key={idx} index={idx} image_url={image} />
                             ))}
                         </div>
-                        <p className="font-semibold">{index + 1}. {question.question}</p>
+                        <p className="font-semibold text-gray-200">{index + 1}. {question.question}</p>
                         <div className="mt-2">
                             {["optionA", "optionB", "optionC", "optionD"].map((option) => (
-                                <div key={option} className={`p-2 rounded-md 
-                                    ${responses[question.id] === question[option] ? "bg-yellow-300" : ""}
-                                    ${correctAnswers[question.id] === question[option] ? "bg-green-300" : ""}`}
+                                <div 
+                                    key={option} 
+                                    className={`p-2 rounded-md my-1 transition 
+                                        ${
+                                            responses[question.id] === question[option] && correctAnswers[question.id] !== question[option]
+                                                ? "bg-red-600 text-white"
+                                                : ""
+                                        } 
+                                        ${
+                                            correctAnswers[question.id] === question[option]
+                                                ? "bg-green-600 text-white"
+                                                : "bg-gray-700 text-gray-300"
+                                        }`}
                                 >
                                     {question[option]}
                                 </div>
                             ))}
                         </div>
                         <p className="mt-2">
-                            ✅ Correct Answer: <span className="text-green-600 font-bold">{correctAnswers[question.id]}</span>
+                            ✅ Correct Answer: <span className="text-green-400 font-bold">{correctAnswers[question.id]}</span>
                         </p>
                         <p>
-                            🏷️ Your Answer: <span className={`font-bold ${responses[question.id] === correctAnswers[question.id] ? "text-green-600" : "text-red-600"}`}>
+                            🏷️ Your Answer: 
+                            <span 
+                                className={`font-bold ml-2 ${
+                                    responses[question.id] === correctAnswers[question.id]
+                                        ? "text-green-400"
+                                        : "text-red-400"
+                                }`}
+                            >
                                 {responses[question.id] || "Not Attempted"}
                             </span>
                         </p>
@@ -108,7 +123,10 @@ const StudentResult = () => {
             </div>
 
             <div className="text-center mt-6">
-                <button className="px-6 py-3 bg-blue-500 text-white rounded" onClick={() => { isteacher === "true" ? navigate("/teacher/homepage") : navigate("/student/homepage") }}>
+                <button 
+                    className="px-6 py-3 bg-yellow-500 text-gray-900 font-bold rounded-lg hover:bg-yellow-600 transition duration-200"
+                    onClick={() => { isteacher === "true" ? navigate("/teacher/homepage") : navigate("/student/homepage") }}
+                >
                     Go to Dashboard
                 </button>
             </div>

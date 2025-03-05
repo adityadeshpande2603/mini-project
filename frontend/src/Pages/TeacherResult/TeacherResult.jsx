@@ -8,7 +8,7 @@ const TeacherResult = () => {
     const { quizId } = useParams();
     const [quizName, setQuizName] = useState("");
     const [attempts, setAttempts] = useState([]);
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchQuiz = async () => {
@@ -51,29 +51,30 @@ const TeacherResult = () => {
     }, [quizId]);
 
     return (
-        <div className="p-6">
-            <h1 className="text-2xl font-bold text-center mb-4">{quizName} - Student Results</h1>
-            
+        <div className="p-6 bg-gray-900 text-white min-h-screen">
+            <h1 className="text-2xl font-bold text-center mb-4 text-gray-100">{quizName} - Student Results</h1>
+
             {attempts.length > 0 ? (
-                <table className="w-full border-collapse border border-gray-400">
+                <table className="w-full border-collapse border border-gray-700 shadow-lg rounded-lg overflow-hidden">
                     <thead>
-                        <tr className="bg-gray-200">
-                            <th className="border border-gray-400 px-4 py-2">Student ID</th>
-                            <th className="border border-gray-400 px-4 py-2">Student Name</th>
-                            <th className="border border-gray-400 px-4 py-2">Score</th>
-                            <th className="border border-gray-400 px-4 py-2">Submitted</th>
+                        <tr className="bg-gray-800 text-gray-200">
+                            <th className="border border-gray-700 px-4 py-3">Student ID</th>
+                            <th className="border border-gray-700 px-4 py-3">Student Name</th>
+                            <th className="border border-gray-700 px-4 py-3">Score</th>
+                            <th className="border border-gray-700 px-4 py-3">Submitted</th>
                         </tr>
                     </thead>
                     <tbody>
                         {attempts.map((attempt, index) => (
-                            <tr key={index} 
-                            className="text-center hover:cursor-pointer hover:bg-yellow-100" 
-                            onClick={() => navigate(`/student/result/${quizId}/${attempt.id}/true`)}
-                        >
-                                <td className="border border-gray-400 px-4 py-2">{attempt.studentId}</td>
-                                <td className="border border-gray-400 px-4 py-2">{attempt.studentName}</td>
-                                <td className="border border-gray-400 px-4 py-2">{attempt.score}</td>
-                                <td className="border border-gray-400 px-4 py-2">
+                            <tr 
+                                key={index} 
+                                className="text-center bg-gray-800 hover:bg-gray-700 transition duration-300 cursor-pointer"
+                                onClick={() => navigate(`/student/result/${quizId}/${attempt.id}/true`)}
+                            >
+                                <td className="border border-gray-700 px-4 py-3">{attempt.studentId}</td>
+                                <td className="border border-gray-700 px-4 py-3">{attempt.studentName}</td>
+                                <td className="border border-gray-700 px-4 py-3">{attempt.score}</td>
+                                <td className="border border-gray-700 px-4 py-3">
                                     {attempt.submitted ? "✅ Yes" : "❌ No"}
                                 </td>
                             </tr>
@@ -81,7 +82,7 @@ const TeacherResult = () => {
                     </tbody>
                 </table>
             ) : (
-                <p className="text-center text-gray-600 mt-4">No students have attempted this quiz yet.</p>
+                <p className="text-center text-gray-400 mt-4">No students have attempted this quiz yet.</p>
             )}
         </div>
     );

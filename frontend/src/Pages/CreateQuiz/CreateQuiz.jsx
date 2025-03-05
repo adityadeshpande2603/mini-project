@@ -60,27 +60,27 @@ const CreateQuiz = ({ onClose, setShowCreateQuiz }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-gray-500/40 z-50 flex items-center justify-center backdrop-blur-sm">
-            <form className="relative flex flex-col border border-gray-300 shadow-lg w-96 bg-white p-6 rounded-lg">
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center backdrop-blur-md">
+            <form className="relative flex flex-col border border-gray-600 shadow-2xl w-96 bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6 rounded-xl text-white">
                 <button
                     type="button"
                     onClick={onClose}
-                    className="absolute top-2 right-2 bg-red-500 text-white font-bold rounded-full px-3 py-1 hover:bg-red-600"
+                    className="absolute top-2 right-2 bg-red-600 text-white font-bold rounded-full px-3 py-1 hover:bg-red-700"
                 >
                     X
                 </button>
 
-                <h2 className="text-lg font-bold text-gray-700 mb-4 text-center">Create a New Quiz</h2>
+                <h2 className="text-lg font-bold text-gray-300 mb-4 text-center">Create a New Quiz</h2>
 
                 {/* Quiz Name Field */}
                 <div className="mb-4">
-                    <label htmlFor="quizName" className="block text-gray-600 font-medium mb-2">Quiz Name</label>
+                    <label htmlFor="quizName" className="block text-gray-400 font-medium mb-2">Quiz Name</label>
                     <input
                         type="text"
                         name="quizName"
                         id="quizName"
                         placeholder="Enter quiz name"
-                        className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        className="w-full border border-gray-500 rounded-lg p-2 bg-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         value={formData.quizName}
                         onChange={handleChange}
                     />
@@ -88,12 +88,12 @@ const CreateQuiz = ({ onClose, setShowCreateQuiz }) => {
 
                 {/* Date Field */}
                 <div className="mb-4">
-                    <label htmlFor="date" className="block text-gray-600 font-medium mb-2">Date</label>
+                    <label htmlFor="date" className="block text-gray-400 font-medium mb-2">Date</label>
                     <input
                         type="date"
                         name="date"
                         id="date"
-                        className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        className="w-full border border-gray-500 rounded-lg p-2 bg-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         value={formData.date}
                         onChange={handleChange}
                     />
@@ -101,12 +101,12 @@ const CreateQuiz = ({ onClose, setShowCreateQuiz }) => {
 
                 {/* Start Time Field */}
                 <div className="mb-4">
-                    <label htmlFor="startTime" className="block text-gray-600 font-medium mb-2">Start Time</label>
+                    <label htmlFor="startTime" className="block text-gray-400 font-medium mb-2">Start Time</label>
                     <input
                         type="time"
                         name="startTime"
                         id="startTime"
-                        className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        className="w-full border border-gray-500 rounded-lg p-2 bg-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         value={formData.startTime}
                         onChange={handleChange}
                     />
@@ -114,12 +114,12 @@ const CreateQuiz = ({ onClose, setShowCreateQuiz }) => {
 
                 {/* Finish Time Field */}
                 <div className="mb-6">
-                    <label htmlFor="finishTime" className="block text-gray-600 font-medium mb-2">Finish Time</label>
+                    <label htmlFor="finishTime" className="block text-gray-400 font-medium mb-2">Finish Time</label>
                     <input
                         type="time"
                         name="finishTime"
                         id="finishTime"
-                        className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        className="w-full border border-gray-500 rounded-lg p-2 bg-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         value={formData.finishTime}
                         onChange={handleChange}
                     />
