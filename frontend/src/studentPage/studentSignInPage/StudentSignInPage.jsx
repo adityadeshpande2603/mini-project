@@ -1,85 +1,111 @@
 import { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import axios from "axios"
+import axios from "axios";
 import { AuthContext } from "../../../lib/authContext/AuthContext.jsx";
+
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
+
 const StudentSignInPage = () => {
-
-    const { currentUser, setCurrentUser, updateUser, currentLocation } = useContext(AuthContext);
-
+    const { updateUser } = useContext(AuthContext);
     const navigate = useNavigate();
-    let location = useLocation();
-    // console.log(location);
+    const location = useLocation();
+
     const [formData, setFormData] = useState({
-
         email: "",
-
         password: "",
-
     });
+    const [errors, setErrors] = useState({});
+
     const handleInputChange = (e) => {
         const { id, value } = e.target;
-        setFormData({
-            ...formData,
-            [id]: value,
-        });
+        setFormData({ ...formData, [id]: value });
+        setErrors({ ...errors, [id]: "" });
+    };
+
+    const validateForm = () => {
+        let newErrors = {};
+        let isValid = true;
+
+        if (!formData.email.trim()) {
+            newErrors.email = "Email is required";
+            isValid = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            newErrors.email = "Invalid email format";
+            isValid = false;
+        }
+
+        if (!formData.password) {
+            newErrors.password = "Password is required";
+            isValid = false;
+        } else if (formData.password.length < 6) {
+            newErrors.password = "Password must be at least 6 characters long";
+            isValid = false;
+        }
+
+        setErrors(newErrors);
+        return isValid;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Log the form data (you can use this for API calls or validation)
-        console.log(formData);
+        if (!validateForm()) return;
 
         const from = location.state?.from?.pathname || "/student/homepage";
 
         try {
-            const res = await axios.post(`${backendUrl}/api/auth/student/login`, {
-                email: formData.email,
-                password: formData.password,
-            }, {
-                withCredentials: true,  // This ensures the cookie is sent
+            const res = await axios.post(`${backendUrl}/api/auth/student/login`, formData, {
+                withCredentials: true,
             });
-            console.log(res.data);
             updateUser(res.data);
-            console.log("login", currentUser);
             navigate(from, { replace: true });
         } catch (err) {
-            console.error(err); // Log the entire error
-
+            console.error("Login failed", err);
+            setErrors({ api: "Invalid email or password" });
         }
     };
 
-
     return (
-        <div>
-            <form action="" onSubmit={handleSubmit} className="text-black flex flex-col border-2 border-black p-4 backdrop-blur-md bg-white/30">
+        <div className="flex items-center justify-center h-screen w-screen bg-gradient-to-br from-black via-gray-900 to-gray-800">
+            <form
+                onSubmit={handleSubmit}
+                className="w-[90%] max-w-lg text-white flex flex-col border border-gray-700 p-6 rounded-lg shadow-xl backdrop-blur-lg bg-white/10"
+            >
+                <h2 className="text-3xl font-bold text-center mb-6 text-white">Student Sign In</h2>
 
-                <div className="flex justify-between mb-4">
-                    <label htmlFor="email">Email:</label>
-                    <input id="email" type="email" className="border-2 border-gray-300 p-2"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                    />
-                </div>
+                {["email", "password"].map((id) => (
+                    <div key={id} className="flex flex-col mb-4">
+                        <label htmlFor={id} className="mb-1 text-gray-300">
+                            {id.charAt(0).toUpperCase() + id.slice(1)}:
+                        </label>
+                        <input
+                            id={id}
+                            type={id}
+                            className="p-3 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            value={formData[id]}
+                            onChange={handleInputChange}
+                        />
+                        {errors[id] && <p className="text-red-400 text-sm">{errors[id]}</p>}
+                    </div>
+                ))}
 
-                <div className="flex justify-between mb-4">
-                    <label htmlFor="password">Password:</label>
-                    <input id="password" type="password" className="border-2 border-gray-300 p-2"
-                        value={formData.password}
-                        onChange={handleInputChange} />
-                </div>
+                {errors.api && <p className="text-red-400 text-center">{errors.api}</p>}
 
-                <button type="submit" className="bg-blue-500 text-white p-2">Submit</button>
-                <div className="flex space-x-2">
-                    <div>don't have an account?</div>
-                    <Link to="/student/register">SignUp</Link>
+                <button
+                    type="submit"
+                    className="mt-4 w-full bg-blue-600 text-white p-3 rounded-lg font-bold shadow-md transition-all duration-300 ease-in-out hover:bg-blue-700 active:scale-95"
+                >
+                    Sign In
+                </button>
+
+                <div className="flex justify-center space-x-2 mt-3 text-gray-300">
+                    <span>Don't have an account?</span>
+                    <Link to="/student/register" className="text-blue-400 hover:underline">
+                        Sign Up
+                    </Link>
                 </div>
             </form>
-
         </div>
-    )
-
-
-}
+    );
+};
 
 export default StudentSignInPage;
