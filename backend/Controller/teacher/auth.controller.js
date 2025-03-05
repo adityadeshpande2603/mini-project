@@ -87,3 +87,36 @@ catch(e) {
 export const logout =(req,res)=>{
 res.clearCookie("token").status(200).json({message:"logout successful"})
 }
+
+export const getTeacherById=async(req,res)=>{
+  try {
+    const { teacherId } = req.query;
+
+    // ✅ Validate input
+    if (!teacherId) {
+        return res.status(400).json({ error: "teacher ID is required" });
+    }
+
+    // ✅ Fetch quiz by ID
+    const teacher = await prisma.teacher.findUnique({
+      where: { id: teacherId },
+      include: {
+          quizzes: {
+              include: {
+                  attempts: true, // Fetch all attempts for each quiz
+              },
+          },
+      },
+  });
+
+    // ✅ Handle case where quiz is not found
+    if (!teacher) {
+        return res.status(404).json({ error: "teacher not found" });
+    }
+
+    res.status(200).json(teacher);
+} catch (e) {
+    console.error("Error fetching teacher:", e);
+    res.status(500).json({ error: "Failed to fetch teacher" });
+}
+}
