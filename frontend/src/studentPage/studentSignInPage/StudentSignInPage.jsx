@@ -92,7 +92,7 @@ const StudentSignInPage = () => {
 
                 <button
                     type="submit"
-                    className="mt-4 w-full bg-blue-600 text-white p-3 rounded-lg font-bold shadow-md transition-all duration-300 ease-in-out hover:bg-blue-700 active:scale-95"
+                    className="mt-4 w-full bg-green-500 text-white p-3 rounded-lg font-bold shadow-md transition-all duration-300 ease-in-out hover:bg-green-800 active:scale-95"
                 >
                     Sign In
                 </button>

@@ -8,13 +8,13 @@ const HomePage = () => {
   return (
     <div className="relative h-screen w-screen bg-gradient-to-br from-black via-gray-900 to-gray-800">
       {/* Logo with Smooth Hover Effect */}
+      
       <Link to="/">
-        <img
-          src="/quiz.jpg"
-          alt="Quiz"
-          className="h-20 absolute left-7 top-7 z-20 transition-all duration-500 ease-in-out transform hover:scale-110 hover:rotate-3"
-        />
-      </Link>
+                <img
+                    src="/quiz.jpg"
+                    alt="Quiz"
+                    className="h-20 absolute left-7 top-7 z-50 "
+                /></Link>
 
       {/* Overlay Content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-20">
