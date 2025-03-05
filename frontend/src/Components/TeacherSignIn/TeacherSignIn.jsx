@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../../../lib/authContext/AuthContext.jsx";
-
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
 
 const TeacherSignIn = () => {
-    const { updateUser } = useContext(AuthContext);
+    const { currentUser, setCurrentUser, updateUser } = useContext(AuthContext);
+    let location = useLocation();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -15,34 +15,36 @@ const TeacherSignIn = () => {
     });
     const [errors, setErrors] = useState({});
 
-    const handleInputChange = (e) => {
-        const { id, value } = e.target;
-        setFormData({ ...formData, [id]: value });
-        setErrors({ ...errors, [id]: "" });
-    };
-
     const validateForm = () => {
-        let newErrors = {};
+        let errors = {};
         let isValid = true;
 
-        if (!formData.email.trim()) {
-            newErrors.email = "Email is required";
+        if (!formData.email) {
+            errors.email = "Email is required";
             isValid = false;
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-            newErrors.email = "Invalid email format";
+            errors.email = "Invalid email format";
             isValid = false;
         }
 
         if (!formData.password) {
-            newErrors.password = "Password is required";
+            errors.password = "Password is required";
             isValid = false;
         } else if (formData.password.length < 6) {
-            newErrors.password = "Password must be at least 6 characters long";
+            errors.password = "Password must be at least 6 characters long";
             isValid = false;
         }
 
-        setErrors(newErrors);
+        setErrors(errors);
         return isValid;
+    };
+
+    const handleInputChange = (e) => {
+        const { id, value } = e.target;
+        setFormData({
+            ...formData,
+            [id]: value,
+        });
     };
 
     const handleSubmit = async (e) => {
@@ -51,57 +53,48 @@ const TeacherSignIn = () => {
         if (!validateForm()) return;
 
         try {
-            const res = await axios.post(`${backendUrl}/api/auth/teacher/login`, formData, {
+            const res = await axios.post(`${backendUrl}/api/auth/teacher/login`, {
+                email: formData.email,
+                password: formData.password,
+            }, {
                 withCredentials: true,
             });
-            
-           
             updateUser(res.data);
             navigate("/teacher/homepage");
         } catch (err) {
             console.error("Login failed", err);
-            setErrors({ api: "Invalid email or password" });
+            setErrors({ apiError: "Invalid email or password" });
         }
     };
 
     return (
-        <div className="flex items-center justify-center h-screen w-screen bg-gradient-to-br from-black via-gray-900 to-gray-800">
-            <form
-                onSubmit={handleSubmit}
-                className="w-[90%] max-w-lg text-white flex flex-col border border-gray-700 p-6 rounded-lg shadow-xl backdrop-blur-lg bg-white/10"
-            >
-                <h2 className="text-3xl font-bold text-center mb-6 text-white">Teacher Sign In</h2>
+        <div>
+            {console.log(location)}
+            <form onSubmit={handleSubmit} className="text-black flex flex-col border-2 border-black p-4 backdrop-blur-md bg-white/30">
+                <div className="flex flex-col mb-4">
+                    <label htmlFor="email">Email:</label>
+                    <input id="email" type="email" className="border-2 border-gray-300 p-2"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                    />
+                    {errors.email && <span className="text-red-500">{errors.email}</span>}
+                </div>
 
-                {["email", "password"].map((id) => (
-                    <div key={id} className="flex flex-col mb-4">
-                        <label htmlFor={id} className="mb-1 text-gray-300">
-                            {id.charAt(0).toUpperCase() + id.slice(1)}:
-                        </label>
-                        <input
-                            id={id}
-                            type={id}
-                            className="p-3 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-400"
-                            value={formData[id]}
-                            onChange={handleInputChange}
-                        />
-                        {errors[id] && <p className="text-red-400 text-sm">{errors[id]}</p>}
-                    </div>
-                ))}
+                <div className="flex flex-col mb-4">
+                    <label htmlFor="password">Password:</label>
+                    <input id="password" type="password" className="border-2 border-gray-300 p-2"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                    />
+                    {errors.password && <span className="text-red-500">{errors.password}</span>}
+                </div>
 
-                {errors.api && <p className="text-red-400 text-center">{errors.api}</p>}
+                {errors.apiError && <div className="text-red-500 mb-4">{errors.apiError}</div>}
 
-                <button
-                    type="submit"
-                    className="mt-4 w-full bg-green-600 text-white p-3 rounded-lg font-bold shadow-md transition-all duration-300 ease-in-out hover:bg-green-700 active:scale-95"
-                >
-                    Sign In
-                </button>
-
-                <div className="flex justify-center space-x-2 mt-3 text-gray-300">
-                    <span>Don't have an account?</span>
-                    <Link to="/teacher/register" className="text-green-400 hover:underline">
-                        Sign Up
-                    </Link>
+                <button type="submit" className="bg-blue-500 text-white p-2">Submit</button>
+                <div className="flex space-x-2 mt-2">
+                    <div>Don't have an account?</div>
+                    <Link to="/teacher/register" className="text-blue-500">Sign Up</Link>
                 </div>
             </form>
         </div>
