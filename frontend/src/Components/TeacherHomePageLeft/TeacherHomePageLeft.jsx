@@ -47,7 +47,7 @@ const TeacherHomePageLeft = () => {
             <input
                 type="text"
                 placeholder="Find Quiz"
-                className="border border-black border-solid m-2 px-2 py-1 w-full"
+                className="border border-black border-solid m-2 px-2 py-1 w-full text-black"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
             />
