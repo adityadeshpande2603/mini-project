@@ -68,7 +68,7 @@ const router = createBrowserRouter([
             element: <QuizBarGraph />
           },
           {
-            path: "/teacher/homepage/quizquestion/:quizId",
+            path: "/teacher/homepage/quizquestion/:quizId/:startTime/:date",
             element: <QuizQuestion />
           },
           {

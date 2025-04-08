@@ -62,6 +62,25 @@ export const getQuizes = async (req, res) => {
         res.status(500).json({ error: "Failed to fetch quizzes" });
     }
 };
+export const getQuestions = async (req, res) => {
+    try {
+        const { quizId } = req.query; // Extract quizId from query params
+
+        if (!quizId) {
+            return res.status(400).json({ message: "Quiz ID is required" });
+        }
+
+        // Fetch questions related to a specific quiz
+        const questions = await prisma.questions.findMany({
+            where: { quizId },
+        });
+
+        return res.status(200).json(questions);
+    } catch (error) {
+        console.error("Error fetching questions:", error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+};
 export const getQuizById = async (req, res) => {
     try {
         const { quizId } = req.query;

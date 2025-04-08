@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import teacherAuthRouter from "./routes/teacher/teacherAuthRoute.js"
 import studentAuthRouter from "./routes/student/studentAuthRoute.js"
 import QuizRouter from "./routes/Quiz/createQuizRoute.js"
+import rsaRouter from "./routes/RSA/rsa.js"
 import cors from "cors";
 import updateQuizStatus from "./Controller/teacher/quizScheduller/quizScheduler.js";
 const app = express();
@@ -24,6 +25,7 @@ app.use(cors({
 app.use("/api/auth/teacher/homepage",QuizRouter)
 app.use("/api/auth/teacher",teacherAuthRouter)
 app.use("/api/auth/student",studentAuthRouter)
+app.use("/api/auth/rsa",rsaRouter)
 
 updateQuizStatus();
 // Routes

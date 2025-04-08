@@ -1,15 +1,14 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import CloudinaryUploadWidget from "../CloudinaryUploadWidget/CloudinaryUploadWidget";
 import ImagePopup from "../ImagePopUp/ImagePopup";
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
-
-const Question = ({ divId, removeDiv, editQuestion, uploadedImage }) => {
+const Question = ({ divId, editQuestion, uploadedImage, setFinalQuestions,finalQuestions }) => {
     const { quizId } = useParams();
     const [questionId, setQuestionId] = useState(null);
     const [images, setImages] = useState([]);
+
+    const [isSaved, setIsSaved] = useState(false);
     const [formData, setFormData] = useState({
         question: "",
         optionA: "",
@@ -31,9 +30,17 @@ const Question = ({ divId, removeDiv, editQuestion, uploadedImage }) => {
                 difficulty: editQuestion.difficulty || "Easy",
                 correctAnswer: editQuestion.correctAnswer || ""
             });
+            setImages(editQuestion.images || []);
             setQuestionId(editQuestion.id);
         }
     }, [editQuestion]);
+    useEffect(() => {
+        console.log("isSaved changed:", isSaved);
+    }, [isSaved]);
+    
+    useEffect(() => {
+        console.log("finalQuestions updated:", finalQuestions);
+    }, [finalQuestions]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -49,30 +56,35 @@ const Question = ({ divId, removeDiv, editQuestion, uploadedImage }) => {
             correctAnswer: prev[option],
         }));
     };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // const newQuestionId = questionId || Date.now(); // Use existing or generate new
+        // setQuestionId(newQuestionId); // Set it in state
 
-    const deleteQuestion = async () => {
-        try {
-            await axios.delete(`${backendUrl}/api/auth/teacher/homepage/deletequestion?questionId=${questionId}`, { withCredentials: true });
-            removeDiv(divId);
-        } catch (e) {
-            console.log("Not able to delete question");
-        }
+        setFinalQuestions(prev => {
+            const updated = [...prev];
+            const lastIndex = updated.length - 1;
+
+            // Keep previous id (fakeId or questionId), and update with formData
+            updated[lastIndex] = {
+                ...updated[lastIndex],
+
+                ...formData,
+                images
+            };
+
+            return updated;
+        });
+        setIsSaved(true);
+
+        // console.log("isSaved", isSaved)
+        // console.log("finalQuestions",finalQuestions)
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const payload = { ...formData, images };
+    const deleteQuestion = (questionId) => {
+        setFinalQuestions(prev => prev.filter(q => q.questionId !== questionId));
 
-        try {
-            if (questionId) {
-                await axios.put(`${backendUrl}/api/auth/teacher/homepage/updatequestion`, { questionId, ...payload }, { withCredentials: true });
-            } else {
-                const res = await axios.post(`${backendUrl}/api/auth/teacher/homepage/createquestion?quizId=${quizId}`, payload, { withCredentials: true });
-                if (res.data && res.data.id) setQuestionId(res.data.id);
-            }
-        } catch (e) {
-            console.log("Error:", e);
-        }
+        console.log("deleted");
     };
 
     return (
@@ -138,10 +150,12 @@ const Question = ({ divId, removeDiv, editQuestion, uploadedImage }) => {
 
                 {/* Buttons */}
                 <div className="flex justify-end mt-4">
-                    <button type="submit" className="h-10 w-24 bg-blue-500 text-white font-bold rounded-md hover:bg-blue-600">
-                        {questionId ? "Update" : "Save"}
+                    <button type="submit" className="h-10 w-24 bg-blue-500 text-white font-bold rounded-md hover:bg-blue-600" disabled={isSaved}>
+                        {isSaved ? "Saved" : "Save"}
                     </button>
-                    <button type="button" className="h-10 w-24 bg-red-500 text-white font-bold rounded-md ml-2 hover:bg-red-600" onClick={deleteQuestion}>
+                    <button type="button" className="h-10 w-24 bg-red-500 text-white font-bold rounded-md ml-2 hover:bg-red-600" onClick={()=>{
+                        deleteQuestion(finalQuestions[finalQuestions.length-1].questionId)
+                    }}>
                         Remove
                     </button>
                 </div>

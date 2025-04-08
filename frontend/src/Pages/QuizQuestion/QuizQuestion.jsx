@@ -5,10 +5,11 @@ import axios from "axios";
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
 
 const QuizQuestion = () => {
-    const { quizId } = useParams();
+    const { quizId, startTime } = useParams();
     const [quizName, setQuizName] = useState("");
     const [isEditing, setIsEditing] = useState(false);
     const [questions, setQuestions] = useState([]); // ✅ Store fetched questions
+    const [finalQuestions, setFinalQuestions] = useState([]); 
     const navigate=useNavigate();
     
 
@@ -33,6 +34,32 @@ const QuizQuestion = () => {
     const handleEditClick = () => {
         setIsEditing(true);
     };
+    const handleSubmit = async () => {
+        const confirmed = window.confirm(
+          "⚠️ Once you click on submit, you will NOT be able to edit or view the question paper again.\nDo you want to continue?"
+        );
+      
+        if (confirmed) {
+          // Call API or proceed with final submission
+          console.log("User confirmed. Submitting...");
+
+          const response = await axios.post(
+            `${backendUrl}/api/auth/rsa/encryptpaper`,
+            {
+              questions: finalQuestions,
+              quizId,
+              startTime
+            },
+            {
+              withCredentials: true
+            }
+          );
+
+          // submitQuiz(); // your actual submission logic
+        } else {
+          console.log("User cancelled.");
+        }
+      };
 
     const handleSaveClick = async () => {
         try {
@@ -49,14 +76,13 @@ const QuizQuestion = () => {
     };
 
     const addQuestion = () => {
-        setQuestions((prevQuestions) => [...prevQuestions, { fakeId: Date.now() }]);
-
-
+        const newQuestion = { questionId: Date.now() };
+    
+        // setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
+        setFinalQuestions((prevFinalQuestions) => [...prevFinalQuestions, newQuestion]); // ✅ Update finalQuestions
     };
 
-    const removeQuestion = (questionId) => {
-        setQuestions(questions.filter((q) => q.id !== questionId));
-    };
+   
 
     return (
         <div className="w-full p-3">
@@ -104,14 +130,16 @@ const QuizQuestion = () => {
 
             {/* ✅ Question Section (Rendering Existing & New Questions) */}
             <div className="questions overflow-auto">
-                {questions.map((question) => (
+                {finalQuestions.map((question) => (
                     <Question
                         uploadedImage={question.images}
                         key={question.fakeId}
                         divId={question.id}
-                        removeDiv={removeQuestion}
+                     
                         addDiv={addQuestion}
                         editQuestion={question} // ✅ Prefill existing question data
+                        setFinalQuestions={setFinalQuestions}
+                        finalQuestions={finalQuestions}
                     />
                 ))}
 
@@ -119,6 +147,9 @@ const QuizQuestion = () => {
                 <div className="flex items-center justify-center">
                     <button className="h-10 w-36 bg-green-500 m-4" onClick={addQuestion}>
                         Add Question
+                    </button>
+                    <button className="h-10 w-36 bg-green-500 m-4" onClick={handleSubmit}>
+                        Final Submit
                     </button>
 
                 </div>

@@ -50,7 +50,7 @@ const CreateQuiz = ({ onClose, setShowCreateQuiz }) => {
             // Navigate after successful submission
             console.log("res", res);
             setTimeout(() => {
-                navigate(`/teacher/homepage/quizquestion/${res.data.id}`);
+                navigate(`/teacher/homepage/quizquestion/${res.data.id}/${res.data.startTime}/${(res.data.date)}`);
                 navigate(0);
             }, 0);
 

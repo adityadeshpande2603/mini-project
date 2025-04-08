@@ -66,6 +66,8 @@ export const login = async (req, res) => {
   {expiresIn:age}
 )
 
+// console.log("adadadadad",process.env.PINATA_JWT)
+
 res.cookie("token",token,{
   httpOnly:true,
   secure: true,  // Required for HTTPS

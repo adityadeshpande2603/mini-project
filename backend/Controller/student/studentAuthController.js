@@ -67,6 +67,8 @@ export const login = async (req, res) => {
   {expiresIn:age}
 )
 
+console.log(process.env.PINATA_JWT);
+
 res.cookie("token",token,{
   httpOnly:true,
   maxAge:age
