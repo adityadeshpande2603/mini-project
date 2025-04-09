@@ -13,7 +13,8 @@ export const encryptPaper = async (req, res) => {
 
     // Combine date and time into ISO string
     const combinedStartTime = new Date(`${date}T${startTime}:00Z`).toISOString();
-
+    
+    console.log(combinedStartTime);
     const encryptedHash = encryptJson(questions);
     const ipfs = await upload(encryptedHash);
 

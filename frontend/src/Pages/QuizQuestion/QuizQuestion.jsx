@@ -5,7 +5,7 @@ import axios from "axios";
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
 
 const QuizQuestion = () => {
-    const { quizId, startTime } = useParams();
+    const { quizId, startTime,date } = useParams();
     const [quizName, setQuizName] = useState("");
     const [isEditing, setIsEditing] = useState(false);
     const [questions, setQuestions] = useState([]); // ✅ Store fetched questions
@@ -42,18 +42,22 @@ const QuizQuestion = () => {
         if (confirmed) {
           // Call API or proceed with final submission
           console.log("User confirmed. Submitting...");
-
+          const dateUpdated=date.split("T")[0];
           const response = await axios.post(
             `${backendUrl}/api/auth/rsa/encryptpaper`,
             {
               questions: finalQuestions,
               quizId,
-              startTime
+              startTime,
+              date: dateUpdated
             },
             {
               withCredentials: true
             }
+
+           
           );
+          alert("done");
 
           // submitQuiz(); // your actual submission logic
         } else {
