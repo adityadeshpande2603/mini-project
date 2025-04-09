@@ -2,9 +2,9 @@ import { JsonRpcProvider, Wallet, Contract } from "ethers";
 import { abi } from "../../abi/abi.js";
 
 // Config
-const CONTRACT_ADDRESS = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
-const PRIVATE_KEY = "ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-const PROVIDER_URL = "http://127.0.0.1:8545/";
+const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
+const PRIVATE_KEY = process.env.PRIVATE_KEY
+const PROVIDER_URL = process.env.PROVIDER_URL;
 
 const provider = new JsonRpcProvider(PROVIDER_URL);
 const wallet = new Wallet(PRIVATE_KEY, provider);
