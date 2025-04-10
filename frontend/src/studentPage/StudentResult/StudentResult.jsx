@@ -6,62 +6,112 @@ import ImagePopup from "../../Components/ImagePopUp/ImagePopup";
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
 
 const StudentResult = () => {
-    const { quizId, attemptId, isteacher } = useParams();
+    const { quizId, studentId, isteacher } = useParams();
     const navigate = useNavigate();
     const [questions, setQuestions] = useState([]);
-    const [responses, setResponses] = useState({});
-    const [correctAnswers, setCorrectAnswers] = useState({});
+    // const [responses, setResponses] = useState({});
+    // const [correctAnswers, setCorrectAnswers] = useState({});
     const [score, setScore] = useState(0);
     const [rank, setRank] = useState(0);
     const [quizName, setQuizName] = useState("");
 
+    // useEffect(() => {
+    //     const fetchResults = async () => {
+    //         try {
+    //             const quizRes = await axios.get(
+    //                 `${backendUrl}/api/auth/teacher/homepage/getquizbyid?quizId=${quizId}`,
+    //                 { withCredentials: true }
+    //             );
+
+               
+    //             try {
+    //                 const response = await axios.post(
+    //                     `${backendUrl}/api/auth/rsa/studentresult`,
+    //                     { quizId, studentId },
+    //                     { withCredentials: true }
+    //                 );
+
+                   
+
+    //                 //  questions = response.data
+    //                 setQuestions(prev => [response.data]);
+    //                 // setQuestions(response.data);
+    //                 console.log("hhhhhhhhhhh",response.data);
+    //                 //   console.log("questions ",questions)
+
+    //                 const answers = {};
+    //                 response.data.forEach((question) => {
+    //                     answers[question.questionId] = question.correctAnswer;
+    //                 });
+    //                 setCorrectAnswers(answers);
+    //             } catch (error) {
+    //                 console.error("Failed to decrypt quiz paper:", error);
+    //             }
+
+    //             setQuizName(quizRes.data.quizName);
+    //             // setQuestions(quizRes.data.questions || []);
+    //             setScore(attemptRes.data.score);
+
+    //             // Store correct answers
+    //             // const answers = {};
+    //             // quizRes.data.questions.forEach((q) => {
+    //             //     answers[q.id] = q.correctAnswer;
+    //             // });
+    //             // setCorrectAnswers(answers);
+
+    //             // Store student responses
+              
+
+           
+    //             setResponses(studentResponses);
+    //         } catch (error) {
+    //             console.error("Error fetching results:", error);
+    //         }
+    //     };
+
+    //     fetchResults();
+    // }, [quizId]);
+
     useEffect(() => {
-        const fetchResults = async () => {
+        const fetchStudentResult = async () => {
             try {
-                const quizRes = await axios.get(
-                    `${backendUrl}/api/auth/teacher/homepage/getquizbyid?quizId=${quizId}`,
+                const response = await axios.post(
+                    `${backendUrl}/api/auth/rsa/studentresult`,
+                    { quizId, studentId },
                     { withCredentials: true }
                 );
+                console.log("📦 Student result:", response.data);
+                // handle response data here (e.g. set it in state)
 
-                const attemptRes = await axios.get(
-                    `${backendUrl}/api/auth/teacher/homepage/getattemptbyid?attemptId=${attemptId}`,
-                    { withCredentials: true }
-                );
+               
 
-                try {
-                    const rankRes = await axios.get(
-                        `${backendUrl}/api/auth/teacher/homepage/getattemptbyrank?attemptId=${attemptId}&quizId=${quizId}`,
-                        { withCredentials: true }
-                    );
-                    setRank(rankRes.data.rank);
-                } catch (e) {
-                    console.log(e);
-                }
 
-                setQuizName(quizRes.data.quizName);
-                setQuestions(quizRes.data.questions || []);
-                setScore(attemptRes.data.score);
 
-                // Store correct answers
-                const answers = {};
-                quizRes.data.questions.forEach((q) => {
-                    answers[q.id] = q.correctAnswer;
-                });
-                setCorrectAnswers(answers);
+                setQuestions(response.data);
+                console.log("heew")
+                //  let correctQuestions=0;
+                //  questions.forEach((q) => {
+                //     console.log(q);
+                //     if (q.isCorrect) correctQuestions++;
+                // });
 
-                // Store student responses
-                const studentResponses = {};
-                attemptRes.data.responses.forEach((res) => {
-                    studentResponses[res.questionId] = res.selectedAnswer;
-                });
-                setResponses(studentResponses);
-            } catch (error) {
-                console.error("Error fetching results:", error);
+                setScore(correctQuestions)
+            } catch (e) {
+                console.error("❌ Error fetching student response:", e);
             }
         };
-
-        fetchResults();
-    }, [quizId, attemptId]);
+    
+        
+            fetchStudentResult();
+        
+    }, [quizId, studentId]);
+    useEffect(() => {
+        let correctQuestions = 0;
+        questions.forEach((q) => {
+            if (q.isCorrect) correctQuestions++;
+        });
+        setScore(correctQuestions);
+    }, [questions]);
 
     return (
         <div className="p-6 bg-gray-900 min-h-screen text-white">
@@ -69,14 +119,15 @@ const StudentResult = () => {
             <h2 className="text-xl text-center text-gray-300">{quizName}</h2>
             <h3 className="text-lg text-center mt-2 text-gray-400">
                 Your Score: <span className="font-bold text-yellow-400">{score} / {questions.length}</span>
+                {/* Your Score: <span className="font-bold text-yellow-400">{questions.length}</span> */}
             </h3>
-            <h3 className="text-lg text-center mt-2 text-gray-400">
+            {/* <h3 className="text-lg text-center mt-2 text-gray-400">
                 Your Rank: <span className="font-bold text-yellow-400">{rank}</span>
-            </h3>
+            </h3> */}
 
             <div className="mt-6 border border-gray-700 p-4 rounded-lg shadow-lg bg-gray-800">
                 {questions.map((question, index) => (
-                    <div key={question.id} className="mb-6 p-4 border-b border-gray-700">
+                    <div key={question.questionId} className="mb-6 p-4 border-b border-gray-700">
                         <div className="flex flex-wrap gap-4">
                             {question.images?.map((image, idx) => (
                                 <ImagePopup key={idx} index={idx} image_url={image} />
@@ -89,12 +140,12 @@ const StudentResult = () => {
                                     key={option} 
                                     className={`p-2 rounded-md my-1 transition 
                                         ${
-                                            responses[question.id] === question[option] && correctAnswers[question.id] !== question[option]
+                                           question.selectedOption=== question[option] && question.correctAnswer !== question[option]
                                                 ? "bg-red-600 text-white"
                                                 : ""
                                         } 
                                         ${
-                                            correctAnswers[question.id] === question[option]
+                                            question.correctAnswer === question[option]
                                                 ? "bg-green-600 text-white"
                                                 : "bg-gray-700 text-gray-300"
                                         }`}
@@ -104,18 +155,18 @@ const StudentResult = () => {
                             ))}
                         </div>
                         <p className="mt-2">
-                            ✅ Correct Answer: <span className="text-green-400 font-bold">{correctAnswers[question.id]}</span>
+                            ✅ Correct Answer: <span className="text-green-400 font-bold">{question.correctAnswer}</span>
                         </p>
                         <p>
                             🏷️ Your Answer: 
                             <span 
                                 className={`font-bold ml-2 ${
-                                    responses[question.id] === correctAnswers[question.id]
+                                    question.selectedOption === question.correctAnswer
                                         ? "text-green-400"
                                         : "text-red-400"
                                 }`}
                             >
-                                {responses[question.id] || "Not Attempted"}
+                                {question.selectedOption  || "Not Attempted"}
                             </span>
                         </p>
                     </div>

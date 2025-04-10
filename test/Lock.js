@@ -54,7 +54,7 @@ describe("TimeLockQuestionPaper", function () {
     
       await setPaper.wait();
 
-      getPaper = await paper.connect(deployer).getPaperCID("1");
+      getPaper = await paper.connect(deployer).getPaperCID("1",unlockTime);
        
       })
 
@@ -68,6 +68,18 @@ describe("TimeLockQuestionPaper", function () {
 
 
     })
+
+    describe("storeStudentResponse", () => {
+      beforeEach(async () => {
+        setResponse = await paper.connect(deployer).storeStudentResponse("1", "abcd", "1");
+        await setResponse.wait();
+      });
+    
+      it("sets student response correctly", async () => {
+        const response = await paper.getStudentResponseCID("1", "1");
+        expect(response).to.equal("abcd");
+      });
+    });
 
     
   })

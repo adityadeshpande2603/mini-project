@@ -1,6 +1,7 @@
 // abi.js
 
-export const abi = [
+export const abi = 
+[
   {
     "inputs": [],
     "stateMutability": "nonpayable",
@@ -32,14 +33,68 @@ export const abi = [
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "string",
+        "name": "paperId",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "indexed": true,
+        "internalType": "string",
+        "name": "studentId",
+        "type": "string"
+      }
+    ],
+    "name": "responseStored",
+    "type": "event"
+  },
+  {
     "inputs": [
       {
         "internalType": "string",
         "name": "paperId",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "chainTime",
+        "type": "uint256"
       }
     ],
     "name": "getPaperCID",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "paperId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "studentId",
+        "type": "string"
+      }
+    ],
+    "name": "getStudentResponseCID",
     "outputs": [
       {
         "internalType": "string",
@@ -114,5 +169,52 @@ export const abi = [
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "paperId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "studentId",
+        "type": "string"
+      }
+    ],
+    "name": "storeStudentResponse",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "name": "studentResponse",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   }
-];
+]

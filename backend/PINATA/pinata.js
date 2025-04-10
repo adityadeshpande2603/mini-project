@@ -29,6 +29,16 @@ export const upload = async (data) => {
     return null;
   }
 };
+export const getDataFromCID=async(cid)=> {
+  try {
+    // const cid = "bafkreiae3t2oeg6bolmqlmm7ufv5l6okok2vimju34jm6f4ohfuexmu2j4";
+    const data = await pinata.gateways.public.get(cid);
+    console.log("✅ Fetched dataaaa:", data);
+    return data
+  } catch (error) {
+    console.log("❌ Fetch error:", error);
+  }
+}
 
 
 // await main();

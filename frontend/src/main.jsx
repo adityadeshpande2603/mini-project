@@ -98,7 +98,7 @@ const router = createBrowserRouter([
         element: <StudentExamWindow />
       },
       {
-        path: "/student/result/:quizId/:attemptId/:isteacher",
+        path: "/student/result/:quizId/:studentId/:isteacher",
         element: <StudentResult />
       }
     ]

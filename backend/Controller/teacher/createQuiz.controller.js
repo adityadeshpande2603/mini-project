@@ -93,7 +93,7 @@ export const getQuizById = async (req, res) => {
         // ✅ Fetch quiz by ID
         const quiz = await prisma.quiz.findUnique({
             where: { id: quizId },
-            include: { questions: true,
+            include: { 
                 attempts:true
              }, // Optional: Fetch related questions
         });

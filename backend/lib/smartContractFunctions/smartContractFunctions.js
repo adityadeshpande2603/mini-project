@@ -9,21 +9,10 @@ const PROVIDER_URL = process.env.PROVIDER_URL;
 const provider = new JsonRpcProvider(PROVIDER_URL);
 const wallet = new Wallet(PRIVATE_KEY, provider);
 const contract = new Contract(CONTRACT_ADDRESS, abi, wallet);
+let drift;
 
 // 📥 Store CID
-export async function storeEncryptedCIDOnChain(paperId, cid, unlockDateTime) {
-  try {
-    const unlockTime = Math.floor(new Date(unlockDateTime).getTime() / 1000);
-    const tx = await contract.storePaper(paperId, cid, unlockTime);
-    await tx.wait();
 
-    console.log(`✅ CID "${cid}" stored for paperId "${paperId}" with unlock time ${unlockDateTime}`);
-    return tx.hash;
-  } catch (err) {
-    console.error(`❌ Paper "${paperId}" could not be uploaded. Error:`, err.reason || err.message || err);
-    return null;
-  }
-}
 
 // ⏳ Sync Chain Time with Real Time
 async function syncChainTimeWithRealTime() {
@@ -40,17 +29,81 @@ async function syncChainTimeWithRealTime() {
   }
 }
 
+export async function storeEncryptedCIDOnChain(paperId, cid, unlockDateTime) {
+  try {
+   console.log(unlockDateTime);
+    const unlockTime = Math.floor(new Date(unlockDateTime).getTime() / 1000);
+    const now = Math.floor(Date.now() / 1000);
+
+   
+
+    
+
+  console.log("nowww",now)
+ 
+  
+    console.log("unlockTime",unlockTime);
+  
+    const tx = await contract.storePaper(paperId, cid, unlockTime);
+    await tx.wait();
+
+    console.log(`✅ CID "${cid}" stored for paperId "${paperId}" with unlock time ${adjustedUnlockTime}`);
+    return tx.hash;
+  } catch (err) {
+    console.error(`❌ Paper "${paperId}" could not be uploaded. Error:`, err.reason || err.message || err);
+    return null;
+  }
+}
+
 // 📤 Get CID with internal time sync
 export async function getCIDFromChain(paperId) {
   try {
-    // Sync time before trying to read CID
-    await syncChainTimeWithRealTime();
+  
 
-    const cid = await contract.getPaperCID(paperId);
+    const now = Math.floor((Date.now() + (5.5 * 60 * 60 * 1000))/1000);
+   
+    // console.log(chainTime-now)
+   
+    console.log("now",now)
+ 
+  
+
+    console.log("now:", now);
+
+
+    const cid = await contract.getPaperCID(paperId,now+2);
     console.log(`📄 CID for "${paperId}": ${cid}`);
     return cid;
   } catch (err) {
     console.error("❌ Error retrieving CID:", err.reason || err);
+
+    
+    throw err;
+  }
+}
+export async function storeStudentResponse(paperId, cid, studentId) {
+  try {
+  
+    const tx = await contract.storeStudentResponse(paperId, cid, studentId);
+    await tx.wait();
+  
+  } catch (err) {
+    console.error("❌ storing response:", err.reason || err);
+
+    
+    throw err;
+  }
+}
+export async function getStudentResponse(paperId, studentId) {
+  try {
+  
+    const cid = await contract.getStudentResponseCID(paperId,studentId);
+    return cid
+  
+  } catch (err) {
+    console.error("❌ Error retrieving CID:", err.reason || err);
+
+    
     throw err;
   }
 }
