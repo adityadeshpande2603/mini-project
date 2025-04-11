@@ -122,6 +122,25 @@ export const abi =
     "inputs": [
       {
         "internalType": "string",
+        "name": "paperId",
+        "type": "string"
+      }
+    ],
+    "name": "paperExists",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
         "name": "",
         "type": "string"
       }

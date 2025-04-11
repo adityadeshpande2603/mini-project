@@ -47,7 +47,7 @@ export async function storeEncryptedCIDOnChain(paperId, cid, unlockDateTime) {
     const tx = await contract.storePaper(paperId, cid, unlockTime);
     await tx.wait();
 
-    console.log(`✅ CID "${cid}" stored for paperId "${paperId}" with unlock time ${adjustedUnlockTime}`);
+    console.log(`✅ CID "${cid}" stored for paperId "${paperId}" with unlock time ${unlockTime}`);
     return tx.hash;
   } catch (err) {
     console.error(`❌ Paper "${paperId}" could not be uploaded. Error:`, err.reason || err.message || err);
@@ -59,10 +59,10 @@ export async function storeEncryptedCIDOnChain(paperId, cid, unlockDateTime) {
 export async function getCIDFromChain(paperId) {
   try {
   
-
+    console.log("paperId",paperId)
     const now = Math.floor((Date.now() + (5.5 * 60 * 60 * 1000))/1000);
-   
-    // console.log(chainTime-now)
+
+  
    
     console.log("now",now)
  
@@ -70,10 +70,17 @@ export async function getCIDFromChain(paperId) {
 
     console.log("now:", now);
 
+   console.log("asdasddfaffa")
 
-    const cid = await contract.getPaperCID(paperId,now+2);
+   
+    
+   console.log("📍 Checking if paper exists on-chain...");
+   const exists = await contract.paperExists(paperId);
+   console.log("🔎 Exists:", exists);
+    const cid = await contract.getPaperCID(paperId,now);
+    
     console.log(`📄 CID for "${paperId}": ${cid}`);
-    return cid;
+   return cid;
   } catch (err) {
     console.error("❌ Error retrieving CID:", err.reason || err);
 

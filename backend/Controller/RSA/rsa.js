@@ -30,7 +30,7 @@ export const decryptPaper = async (req, res) => {
   try {
     console.log("hiiiii")
     const { quizId} = req.body;
-   const cid= await getCIDFromChain(quizId,);
+   const cid= await getCIDFromChain(quizId);
 
    const encryptedHash=await getDataFromCID(cid)
 console.log(encryptedHash.data.encryptedData)

@@ -8,8 +8,6 @@ contract TimeLockQuestionPaper {
         bool exists;
     }
 
-    // string public name="hello";
-
     mapping(string => Paper) public papers;
     mapping(string => mapping(string => string)) public studentResponse;
     address public owner;
@@ -37,7 +35,7 @@ contract TimeLockQuestionPaper {
     ) external onlyOwner {
         require(!papers[paperId].exists, "Paper already exists");
         require(
-            unlockTime > block.timestamp,
+            unlockTime >= block.timestamp,
             "Unlock time must be in the future"
         );
 
@@ -55,12 +53,16 @@ contract TimeLockQuestionPaper {
 
         return papers[paperId].cid;
     }
+
+    function paperExists(string memory paperId) external view returns (bool) {
+        return papers[paperId].exists;
+    }
+
     function storeStudentResponse(
         string memory paperId,
         string memory cid,
         string memory studentId
     ) external {
-        // papers[paperId] = Paper(cid, unlockTime, true);
         studentResponse[paperId][studentId] = cid;
 
         emit responseStored(paperId, cid, studentId);
