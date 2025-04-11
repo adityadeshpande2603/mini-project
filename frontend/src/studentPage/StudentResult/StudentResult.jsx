@@ -95,7 +95,7 @@ const StudentResult = () => {
                 //     if (q.isCorrect) correctQuestions++;
                 // });
 
-                setScore(correctQuestions)
+                // setScore(correctQuestions)
             } catch (e) {
                 console.error("❌ Error fetching student response:", e);
             }
@@ -106,13 +106,21 @@ const StudentResult = () => {
         
     }, [quizId, studentId]);
     useEffect(() => {
-        let correctQuestions = 0;
-        questions.forEach((q) => {
-            if (q.isCorrect) correctQuestions++;
-        });
-        setScore(correctQuestions);
+        const calculateAndSendScore = async () => {
+            let correctQuestions = 0;
+            questions.forEach((q) => {
+                if (q.isCorrect) correctQuestions++;
+            });
+    
+            setScore(correctQuestions);
+    
+           
+        };
+    
+        if (questions.length > 0) {
+            calculateAndSendScore();
+        }
     }, [questions]);
-
     return (
         <div className="p-6 bg-gray-900 min-h-screen text-white">
             <h1 className="text-3xl font-bold text-center mb-4 text-yellow-400">Quiz Results</h1>

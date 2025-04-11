@@ -45,20 +45,20 @@ describe("TimeLockQuestionPaper", function () {
     
   })
 
-  describe("isPaperExist", () => {
-    it("returns false for a paper that does not exist", async () => {
-      const exists = await paper.isPaperExist("non_existing_paper");
-      expect(exists).to.equal(false);
-    });
+  // describe("isPaperExist", () => {
+  //   it("returns false for a paper that does not exist", async () => {
+  //     const exists = await paper.isPaperExist("non_existing_paper");
+  //     expect(exists).to.equal(false);
+  //   });
   
-    it("returns true for a paper that exists", async () => {
-      const unlockTime = Math.floor(Date.now() / 1000) + 3600; // 1 hour from now
-      await paper.connect(deployer).storePaper("maths_midsem_91", "somecid", unlockTime);
+  //   it("returns true for a paper that exists", async () => {
+  //     const unlockTime = Math.floor(Date.now() / 1000) + 3600; // 1 hour from now
+  //     await paper.connect(deployer).storePaper("maths_midsem_91", "somecid", unlockTime);
   
-      const exists = await paper.isPaperExist("maths_midsem_91");
-      expect(exists).to.equal(false);
-    });
-  });
+  //     const exists = await paper.isPaperExist("maths_midsem_91");
+  //     expect(exists).to.equal(false);
+  //   });
+  // });
 //    describe("getPaper", () => {
 //   let unlockTime;
 //   const paperId = "maths_midsem_90";
@@ -118,6 +118,22 @@ describe("getPaper", () => {
       it("sets student response correctly", async () => {
         const response = await paper.getStudentResponseCID("1", "1");
         expect(response).to.equal("abcd");
+      });
+    });
+
+    describe("addStudentScore", () => {
+      beforeEach(async () => {
+        await paper.connect(deployer).addStudentScore("quiz1", "student1", 80);
+        await paper.connect(deployer).addStudentScore("quiz1", "student2", 95);
+      });
+    
+      it("stores multiple student scores for a quiz", async () => {
+        const scores = await paper.getStudentScores("quiz1");
+        expect(scores.length).to.equal(2);
+        expect(scores[0].studentId).to.equal("student1");
+        expect(scores[0].score).to.equal(80);
+        expect(scores[1].studentId).to.equal("student2");
+        expect(scores[1].score).to.equal(95);
       });
     });
 

@@ -56,7 +56,7 @@ const TeacherHomePageLeft = () => {
             {filteredQuizzes.length > 0 ? (
                 filteredQuizzes.map((quiz) => (
                     <div key={quiz.id} className="flex items-center cursor-pointer hover:font-bold" onClick={() => {
-                        navigate(`/teacher/homepage/quizquestion/${quiz.id}`);
+                        navigate(`/teacher/homepage/quizresult/${quiz.id}`);
                     }}>
                         <img src="/Avatar.jpg" alt="Quiz Avatar" className="size-8 rounded-full m-4" />
                         <div>{quiz.quizName}</div>

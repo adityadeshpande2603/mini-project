@@ -18,6 +18,11 @@ const StudentExamWindow = () => {
     const [correctAnswer, setCorrectAnswer] = useState({});
     const [quizName, setQuizName] = useState("");
     const [active, setActive] = useState(true);
+    const [startTime, setStartTime] = useState();
+    const [endTime, setEndTime] = useState();
+    const [date, setDate] = useState();
+    const [overQuiz, setOverQuiz] = useState(false);
+    const [timeLeft, setTimeLeft] = useState("");
 
     useEffect(() => {
         const fetchDecryptedQuestions = async () => {
@@ -47,18 +52,63 @@ const StudentExamWindow = () => {
         fetchDecryptedQuestions();
     }, [active]);
 
+
     const handleOptionSelect = (questionId, selectedOption) => {
         setResponses((prev) => ({
             ...prev,
             [questionId]: selectedOption,
         }));
     };
+    useEffect(() => {
+        const fetchQuizData = async () => {
+            try {
+                const res = await axios.get(
+                    `${backendUrl}/api/auth/teacher/homepage/getquizbyid?quizId=${quizId}`,
+                    { withCredentials: true }
+                );
+                console.log("dadadad", res.data);
+                setQuizName(res.data.quizName);
+                // setQuestions(res.data.questions || []);
+                setActive(res.data.isActive);
+                setStartTime(res.data.startTime);
+                setEndTime(res.data.endTime);
+                setDate(res.data.date);
+
+                startTimer(res.data.date, res.data.startTime, res.data.endTime);
+            } catch (error) {
+                console.error("Error fetching questions:", error);
+            }
+        };
+
+        fetchQuizData(); // call the async function
+    }, [quizId]);
+    const startTimer = (date, startTime, endTime) => {
+        const interval = setInterval(() => {
+            const now = moment().tz("Asia/Kolkata");
+            const quizStartTime = moment.tz(`${date} ${startTime}`, "YYYY-MM-DD HH:mm", "Asia/Kolkata");
+            const quizEndTime = moment.tz(`${date} ${endTime}`, "YYYY-MM-DD HH:mm", "Asia/Kolkata");
+            const timeUntilStart = moment.duration(quizStartTime.diff(now));
+            const timeUntilEnd = moment.duration(quizEndTime.diff(now));
+
+            if (timeUntilStart.asSeconds() > 0) {
+                setTimeLeft(`Quiz starts in: ${timeUntilStart.hours()}h ${timeUntilStart.minutes()}m ${timeUntilStart.seconds()}s`);
+            } else if (timeUntilEnd.asSeconds() > 0) {
+                setActive(true);
+                setTimeLeft(`Time left: ${timeUntilEnd.hours()}h ${timeUntilEnd.minutes()}m ${timeUntilEnd.seconds()}s`);
+            } else {
+                setTimeLeft("Time Over!");
+                setOverQuiz(true);
+                clearInterval(interval);
+            }
+        }, 1000);
+    };
+
 
     const handleSubmit = async () => {
         if (!window.confirm("Are you sure you want to submit the quiz?")) return;
 
         try {
-          
+
 
             let correctCountTemp = 0;
 
@@ -67,18 +117,18 @@ const StudentExamWindow = () => {
             const updatedQuestions = questions.map((q) => {
                 const isCorrect = responses[q.questionId] === correctAnswer[q.questionId];
                 console.log(responses[q.questionId], correctAnswer[q.questionId]);
-            
+
                 if (isCorrect) correctCountTemp++;
-            
-                return { ...q, isCorrect, "selectedOption" : responses[q.questionId] };
+
+                return { ...q, isCorrect, "selectedOption": responses[q.questionId] };
             });
 
 
             console.log(updatedQuestions);
 
             // for (const key of Object.keys(responses)) {
-                
-              
+
+
             // //  console.log(res.data.id,key,responses[key],isCorrect)
             //     try {
             //         await axios.post(
@@ -112,10 +162,26 @@ const StudentExamWindow = () => {
                     studentId: currentUser.id,
                     response: updatedQuestions
                 }, { withCredentials: true });
-            
+
                 console.log("Responses uploaded successfully.");
             } catch (error) {
                 console.error("Failed to upload responses:", error.response?.data || error.message);
+            }
+
+            try {
+                await axios.post(
+                    `${backendUrl}/api/auth/rsa/addstudentscore`,
+                    {
+                        quizId,
+                        studentId: currentUser.id,
+                        score: correctCountTemp,
+                    },
+                    { withCredentials: true }
+                );
+
+                console.log("Score is added to chain");
+            } catch (error) {
+                console.error("Error posting score:", error);
             }
 
             alert("Quiz Submitted Successfully!");
@@ -125,6 +191,23 @@ const StudentExamWindow = () => {
         }
     };
 
+    if (!active) {
+        return (
+            <div className="flex justify-center items-center h-screen flex-col  bg-gradient-to-br from-gray-900 to-black text-white">
+                <h2 className="text-2xl font-bold text-red-600">This quiz is not active yet!</h2>
+                <h2 className="text-lg font-bold">{timeLeft}</h2>
+            </div>
+        );
+    }
+
+    if (overQuiz) {
+        return (
+            <div className="flex justify-center items-center h-screen flex-col bg-gradient-to-br from-gray-900 to-black text-white">
+                <h2 className="text-2xl font-bold text-red-600">Quiz Over!</h2>
+                <h2 className="text-lg font-bold">Your responses have been submitted.</h2>
+            </div>
+        );
+    }
     const currentQuestion = questions[currentQuestionIndex];
 
     return (
@@ -176,11 +259,10 @@ const StudentExamWindow = () => {
                                 {["optionA", "optionB", "optionC", "optionD"].map((optionKey) => (
                                     <button
                                         key={optionKey}
-                                        className={`w-full p-3 text-left border rounded-md text-black transition duration-300 ease-in-out hover:bg-gradient-to-r from-green-600 to-green-800 ${
-                                            responses[currentQuestion.questionId] === currentQuestion[optionKey]
+                                        className={`w-full p-3 text-left border rounded-md text-black transition duration-300 ease-in-out hover:bg-gradient-to-r from-green-600 to-green-800 ${responses[currentQuestion.questionId] === currentQuestion[optionKey]
                                                 ? "bg-gradient-to-r from-green-600 to-green-800 text-white"
                                                 : "bg-white"
-                                        }`}
+                                            }`}
                                         onClick={() => handleOptionSelect(currentQuestion.questionId, currentQuestion[optionKey])}
                                     >
                                         {currentQuestion[optionKey]}
@@ -191,11 +273,10 @@ const StudentExamWindow = () => {
                             {/* Navigation Buttons */}
                             <div className="flex justify-between mt-6">
                                 <button
-                                    className={`px-6 py-3 rounded-lg font-semibold text-white transition duration-300 ease-in-out shadow-md ${
-                                        currentQuestionIndex === 0
+                                    className={`px-6 py-3 rounded-lg font-semibold text-white transition duration-300 ease-in-out shadow-md ${currentQuestionIndex === 0
                                             ? "bg-gray-400 cursor-not-allowed"
                                             : "bg-purple-600 hover:bg-purple-700 active:scale-95 focus:ring-2 focus:ring-purple-400"
-                                    }`}
+                                        }`}
                                     disabled={currentQuestionIndex === 0}
                                     onClick={() => setCurrentQuestionIndex(currentQuestionIndex - 1)}
                                 >
@@ -203,11 +284,10 @@ const StudentExamWindow = () => {
                                 </button>
 
                                 <button
-                                    className={`px-6 py-3 rounded-lg font-semibold text-white transition duration-300 ease-in-out shadow-md ${
-                                        currentQuestionIndex === questions.length - 1
+                                    className={`px-6 py-3 rounded-lg font-semibold text-white transition duration-300 ease-in-out shadow-md ${currentQuestionIndex === questions.length - 1
                                             ? "bg-gray-400 cursor-not-allowed"
                                             : "bg-blue-600 hover:bg-blue-700 active:scale-95 focus:ring-2 focus:ring-blue-400"
-                                    }`}
+                                        }`}
                                     disabled={currentQuestionIndex === questions.length - 1}
                                     onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}
                                 >

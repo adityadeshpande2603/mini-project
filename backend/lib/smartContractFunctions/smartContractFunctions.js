@@ -101,6 +101,19 @@ export async function storeStudentResponse(paperId, cid, studentId) {
     throw err;
   }
 }
+export async function studentScore(paperId,studentId,score) {
+  try {
+  
+    const tx = await contract.addStudentScore(paperId,studentId,score);
+    await tx.wait();
+  
+  } catch (err) {
+    console.error("❌ Error in adding score :", err.reason || err);
+
+    
+    throw err;
+  }
+}
 export async function getStudentResponse(paperId, studentId) {
   try {
   
@@ -111,6 +124,24 @@ export async function getStudentResponse(paperId, studentId) {
     console.error("❌ Error retrieving CID:", err.reason || err);
 
     
+    throw err;
+  }
+}
+export async function displayStudentScore(paperId, studentId) {
+  try {
+    const studentScores = await contract.getStudentScores(paperId);
+    
+    // Convert BigInt to regular number or string
+    const formattedScores = studentScores.map((student) => ({
+      studentId: student[0],
+      score: Number(student[1]) // or use `score: student[1].toString()` if you want to keep it as string
+    }));
+
+    console.log("studentScore", formattedScores);
+    return formattedScores;
+
+  } catch (err) {
+    console.error("❌ Error retrieving student scores:", err.reason || err);
     throw err;
   }
 }

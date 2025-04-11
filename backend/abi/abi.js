@@ -61,6 +61,29 @@ export const abi =
     "inputs": [
       {
         "internalType": "string",
+        "name": "quizId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "studentId",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "score",
+        "type": "uint256"
+      }
+    ],
+    "name": "addStudentScore",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
         "name": "paperId",
         "type": "string"
       },
@@ -100,6 +123,37 @@ export const abi =
         "internalType": "string",
         "name": "",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "quizId",
+        "type": "string"
+      }
+    ],
+    "name": "getStudentScores",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "studentId",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "score",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct TimeLockQuestionPaper.Student[]",
+        "name": "",
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",
@@ -161,6 +215,35 @@ export const abi =
         "internalType": "bool",
         "name": "exists",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "quizToStudents",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "studentId",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "score",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

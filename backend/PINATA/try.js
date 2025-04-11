@@ -18,9 +18,9 @@
 //     const [correctCount, setCorrectCount] = useState(0);
 //     const [overQuiz, setOverQuiz] = useState(false);
 //     const [active, setActive] = useState(false);
-//     const [startTime, setStartTime] = useState();
-//     const [endTime, setEndTime] = useState();
-//     const [date, setDate] = useState();
+    // const [startTime, setStartTime] = useState();
+    // const [endTime, setEndTime] = useState();
+    // const [date, setDate] = useState();
 //     const [image, setImage] = useState([]);
 //     const [isOpen, SetIsOpen] = useState(false);
 
@@ -95,26 +95,26 @@
 //             } catch (error) {
 //                 console.error("Error fetching student data:", error);
 //             }
-//             try {
-//                 const res = await axios.get(
-//                     `${backendUrl}/api/auth/teacher/homepage/getquizbyid?quizId=${quizId}`,
-//                     { withCredentials: true }
-//                 );
-//                 console.log("dadadad", res.data);
-//                 setQuizName(res.data.quizName);
-//                 // setQuestions(res.data.questions || []);
-//                 setActive(res.data.isActive);
-//                 setStartTime(res.data.startTime);
-//                 setEndTime(res.data.endTime);
-//                 setDate(res.data.date);
+            // try {
+            //     const res = await axios.get(
+            //         `${backendUrl}/api/auth/teacher/homepage/getquizbyid?quizId=${quizId}`,
+            //         { withCredentials: true }
+            //     );
+            //     console.log("dadadad", res.data);
+            //     setQuizName(res.data.quizName);
+            //     // setQuestions(res.data.questions || []);
+            //     setActive(res.data.isActive);
+            //     setStartTime(res.data.startTime);
+            //     setEndTime(res.data.endTime);
+            //     setDate(res.data.date);
 
 
 
 
-//                 startTimer(res.data.date, res.data.startTime, res.data.endTime);
-//             } catch (error) {
-//                 console.error("Error fetching questions:", error);
-//             }
+            //     startTimer(res.data.date, res.data.startTime, res.data.endTime);
+            // } catch (error) {
+            //     console.error("Error fetching questions:", error);
+            // }
 //         };
 
 //         fetchQuestions();
@@ -122,26 +122,26 @@
 
 
 
-//     const startTimer = (date, startTime, endTime) => {
-//         const interval = setInterval(() => {
-//             const now = moment().tz("Asia/Kolkata");
-//             const quizStartTime = moment.tz(`${date} ${startTime}`, "YYYY-MM-DD HH:mm", "Asia/Kolkata");
-//             const quizEndTime = moment.tz(`${date} ${endTime}`, "YYYY-MM-DD HH:mm", "Asia/Kolkata");
-//             const timeUntilStart = moment.duration(quizStartTime.diff(now));
-//             const timeUntilEnd = moment.duration(quizEndTime.diff(now));
+    // const startTimer = (date, startTime, endTime) => {
+    //     const interval = setInterval(() => {
+    //         const now = moment().tz("Asia/Kolkata");
+    //         const quizStartTime = moment.tz(`${date} ${startTime}`, "YYYY-MM-DD HH:mm", "Asia/Kolkata");
+    //         const quizEndTime = moment.tz(`${date} ${endTime}`, "YYYY-MM-DD HH:mm", "Asia/Kolkata");
+    //         const timeUntilStart = moment.duration(quizStartTime.diff(now));
+    //         const timeUntilEnd = moment.duration(quizEndTime.diff(now));
 
-//             if (timeUntilStart.asSeconds() > 0) {
-//                 setTimeLeft(`Quiz starts in: ${timeUntilStart.hours()}h ${timeUntilStart.minutes()}m ${timeUntilStart.seconds()}s`);
-//             } else if (timeUntilEnd.asSeconds() > 0) {
-//                 setActive(true);
-//                 setTimeLeft(`Time left: ${timeUntilEnd.hours()}h ${timeUntilEnd.minutes()}m ${timeUntilEnd.seconds()}s`);
-//             } else {
-//                 setTimeLeft("Time Over!");
-//                 setOverQuiz(true);
-//                 clearInterval(interval);
-//             }
-//         }, 1000);
-//     };
+    //         if (timeUntilStart.asSeconds() > 0) {
+    //             setTimeLeft(`Quiz starts in: ${timeUntilStart.hours()}h ${timeUntilStart.minutes()}m ${timeUntilStart.seconds()}s`);
+    //         } else if (timeUntilEnd.asSeconds() > 0) {
+    //             setActive(true);
+    //             setTimeLeft(`Time left: ${timeUntilEnd.hours()}h ${timeUntilEnd.minutes()}m ${timeUntilEnd.seconds()}s`);
+    //         } else {
+    //             setTimeLeft("Time Over!");
+    //             setOverQuiz(true);
+    //             clearInterval(interval);
+    //         }
+    //     }, 1000);
+    // };
 
 
 //     const handleOptionSelect = (questionId, selectedOption) => {
@@ -199,23 +199,23 @@
     //     }
     // };
 
-//     if (!active) {
-//         return (
-//             <div className="flex justify-center items-center h-screen flex-col  bg-gradient-to-br from-gray-900 to-black text-white">
-//                 <h2 className="text-2xl font-bold text-red-600">This quiz is not active yet!</h2>
-//                 <h2 className="text-lg font-bold">{timeLeft}</h2>
-//             </div>
-//         );
-//     }
+    // if (!active) {
+    //     return (
+    //         <div className="flex justify-center items-center h-screen flex-col  bg-gradient-to-br from-gray-900 to-black text-white">
+    //             <h2 className="text-2xl font-bold text-red-600">This quiz is not active yet!</h2>
+    //             <h2 className="text-lg font-bold">{timeLeft}</h2>
+    //         </div>
+    //     );
+    // }
 
-//     if (overQuiz) {
-//         return (
-//             <div className="flex justify-center items-center h-screen flex-col bg-gradient-to-br from-gray-900 to-black text-white">
-//                 <h2 className="text-2xl font-bold text-red-600">Quiz Over!</h2>
-//                 <h2 className="text-lg font-bold">Your responses have been submitted.</h2>
-//             </div>
-//         );
-//     }
+    // if (overQuiz) {
+    //     return (
+    //         <div className="flex justify-center items-center h-screen flex-col bg-gradient-to-br from-gray-900 to-black text-white">
+    //             <h2 className="text-2xl font-bold text-red-600">Quiz Over!</h2>
+    //             <h2 className="text-lg font-bold">Your responses have been submitted.</h2>
+    //         </div>
+    //     );
+    // }
 
 
 //     if (active) {
