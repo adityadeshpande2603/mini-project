@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../lib/authContext/AuthContext";
 import ImagePopup from "../../Components/ImagePopUp/ImagePopup";
+import moment from "moment";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
 
@@ -214,6 +215,7 @@ const StudentExamWindow = () => {
         <div className="exam-container flex flex-col h-screen bg-blue-950 bg-gradient-to-br from-gray-900 to-black text-white">
             <div className="flex justify-between items-center px-6 py-3 bg-gray-800">
                 <h2 className="text-lg font-bold">{quizName}</h2>
+                <h2 className="text-lg font-bold">{timeLeft}</h2>
                 <h2 className="text-lg font-bold">Question {currentQuestionIndex + 1} of {questions.length}</h2>
                 <button
                     className="quiz-button bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-400"

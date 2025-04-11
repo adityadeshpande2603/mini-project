@@ -108,7 +108,7 @@ const StudentHomePage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {attempts.length > 0 ? (
                     attempts.map((attempt, index) => (
-                        <Link key={index} to={`/student/result/${attempt.quizId}/${attempt.id}/false`}>
+                        <Link key={index} to={`/student/result/${attempt.quizId}/${currentUser.id}/false`}>
                             <StudentCard
                                 quizId={attempt.quizId}
                                 score={attempt.score}
