@@ -44,7 +44,11 @@ Follow the steps below to set up both the frontend and backend of this project.
     npx hardhat node
 7. Run deployment script
     ```sh
-    npx hardhat run ./scripts/deploy.js --network localhost         
+    npx hardhat run ./scripts/deploy.js --network localhost 
+8.  copy the contract address and paste it in `.backend/.env`    file    
+
+      ```env
+      CONTRACT_ADDRESS=<CONTRACT_ADDRESS>
 
 ## **Backend Setup**   
 
