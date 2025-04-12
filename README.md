@@ -50,16 +50,20 @@ Follow the steps below to set up both the frontend and backend of this project.
       ```env
       CONTRACT_ADDRESS=<CONTRACT_ADDRESS>
 
-## **Backend Setup**   
+## **Backend Setup**  
 
-1. Navigate to the frontend directory and create a `.env` file.
-2. Copy and paste the following environment variables into the `.env` file:
+1. Navigate to `backend/lib/utils/aesAlogo.js` and run following command to create AES algorithm keys
+
+   ```sh
+   npx hardhat node
+2. Navigate to the frontend directory and create a `.env` file.
+3. Copy and paste the following environment variables into the `.env` file:
 
    ```env
    DATABASE_URL=<your-mongodb-connection-string>
    JWT_SECRETE_KEY=<your-secret-key>  
    
-3. Run the following commands to set up the project:
+4. Run the following commands to set up the project:
 
    ```sh
     npm install
