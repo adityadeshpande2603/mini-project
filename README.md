@@ -33,8 +33,8 @@ Follow the steps below to set up both the frontend and backend of this project.
        
        ```env
        API_Key=<API_Key> 
-       API_Secret=<PINATA_JWT=> 
-      PINATA_JWT==<PINATA_JWT=> 
+       API_Secret=<PINATA_JWT> 
+       PINATA_JWT=<PINATA_JWT>
 
 ## **Backend Setup**   
 
