@@ -2,7 +2,7 @@ import { encryptJsonArray } from "../../lib/utils/encryptDecrypt.js";
 import jwt from 'jsonwebtoken';
 import {  getDataFromCID, upload } from "../../PINATA/pinata.js";
 import { decryptJson, encryptJson } from "../../lib/utils/aesAlogo.js";
-import { displayStudentScore, getCIDFromChain, getStudentResponse, storeEncryptedCIDOnChain, storeStudentResponse, studentScore, } from "../../lib/smartContractFunctions/smartContractFunctions.js";
+import { displayStudentScore, getCIDFromChain, getQuizScore, getStudentResponse, storeEncryptedCIDOnChain, storeQuizScore, storeStudentResponse, studentScore, } from "../../lib/smartContractFunctions/smartContractFunctions.js";
 
 
 
@@ -89,12 +89,7 @@ export const addStudentResult = async (req, res) => {
   try {
     const {  quizId, studentId,score } = req.body;
 
-    // Combine date and time into ISO string
-  
-    
-    
 
-    // const ipfs = await upload(response);
 
 await  studentScore(quizId,studentId,score);
   // console.log(questionPaper);
@@ -108,12 +103,7 @@ export const showStudentScore = async (req, res) => {
   try {
     const {  quizId } = req.body;
 
-    // Combine date and time into ISO string
-  
-    
-    
-
-    // const ipfs = await upload(response);
+   
 
 const result =await  displayStudentScore(quizId);
   // console.log(questionPaper);
@@ -123,4 +113,36 @@ const result =await  displayStudentScore(quizId);
     return res.status(500).json({ error: 'Failed to show scores' });
   }
 };
+
+export const storeScoreForStudent = async (req, res) => {
+  try {
+    const {  quizId, quizName, studentId,score } = req.body;
+
+    console.log("hhhhhhh");
+
+await  storeQuizScore(quizId,quizName,studentId,score);
+  
+    return res.status(200).json({"message": "done"});
+  } catch (error) {
+    console.error(' error:', error);
+    return res.status(500).json({ error: 'Failed to add score' });
+  }
+};
+
+export const showScore = async (req, res) => {
+  try {
+    const {  studentId } = req.body;
+
+   
+
+const result =await  getQuizScore(studentId);
+  // console.log(questionPaper);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error(' error:', error);
+    return res.status(500).json({ error: 'Failed to show scores' });
+  }
+};
+
+
   

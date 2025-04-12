@@ -93,9 +93,9 @@ const TeacherResult = () => {
                     <thead>
                         <tr className="bg-gray-800 text-gray-200">
                             <th className="border border-gray-700 px-4 py-3">Student ID</th>
-                            <th className="border border-gray-700 px-4 py-3">Student Name</th>
-                            {/* <th className="border border-gray-700 px-4 py-3">Score</th>
-                            <th className="border border-gray-700 px-4 py-3">Submitted</th> */}
+                            {/* <th className="border border-gray-700 px-4 py-3">Student Name</th> */}
+                             <th className="border border-gray-700 px-4 py-3">Score</th>
+                            {/*<th className="border border-gray-700 px-4 py-3">Submitted</th> */}
                         </tr>
                     </thead>
                     <tbody>

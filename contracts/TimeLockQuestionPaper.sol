@@ -7,14 +7,22 @@ contract TimeLockQuestionPaper {
         uint256 unlockTime;
         bool exists;
     }
+
+    struct QuizScore {
+        string quizId;
+        string quizName;
+        uint256 score;
+    }
     struct Student {
         string studentId;
         uint256 score;
     }
     mapping(string => Student[]) public quizToStudents;
+    mapping(string => QuizScore[]) public quizScore;
 
     mapping(string => Paper) public papers;
     mapping(string => mapping(string => string)) public studentResponse;
+   
     address public owner;
 
     event PaperStored(string indexed paperId, string cid, uint256 unlockTime);
@@ -88,10 +96,23 @@ contract TimeLockQuestionPaper {
         quizToStudents[quizId].push(Student(studentId, score));
     }
 
-     function getStudentScores(
+    function getStudentScores(
         string memory quizId
     ) public view returns (Student[] memory) {
         return quizToStudents[quizId];
     }
-   
+    function storeQuizScore(
+        string memory quizId,
+        string memory quizName,
+        string memory studentId,
+        uint256 score
+    ) public {
+        quizScore[studentId].push(QuizScore(quizId,quizName, score));
+    }
+
+    function getQuizScores(
+        string memory studentId
+    ) public view returns (QuizScore[] memory) {
+        return quizScore[studentId];
+    }
 }

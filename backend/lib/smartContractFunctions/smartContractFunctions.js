@@ -134,6 +134,7 @@ export async function displayStudentScore(paperId, studentId) {
     // Convert BigInt to regular number or string
     const formattedScores = studentScores.map((student) => ({
       studentId: student[0],
+      
       score: Number(student[1]) // or use `score: student[1].toString()` if you want to keep it as string
     }));
 
@@ -142,6 +143,40 @@ export async function displayStudentScore(paperId, studentId) {
 
   } catch (err) {
     console.error("❌ Error retrieving student scores:", err.reason || err);
+    throw err;
+  }
+}
+
+export async function storeQuizScore(paperId,quizName,studentId,score) {
+  try {
+   console.log("adadadasdasd")
+   const tx= await contract.storeQuizScore(paperId,quizName,studentId,score);
+   await tx.wait();
+    // return cid
+  
+  } catch (err) {
+    console.error("❌ Error storing quiz score:", err.message || err);
+
+    
+    throw err;
+  }
+}
+
+export async function getQuizScore(studentId) {
+  try {
+    const quizScores = await contract.getQuizScores(studentId);
+    
+    const formattedScores = quizScores.map((quiz) => ({
+      quizId: quiz[0], 
+      quizName: quiz[1],           // ✅ corrected typo
+      score: Number(quiz[2])      // if you're sure it's always a number
+    }));
+
+    console.log("quizScore", formattedScores);
+    return formattedScores;
+
+  } catch (err) {
+    console.error("❌ Error retrieving quiz scores:", err.reason || err);
     throw err;
   }
 }

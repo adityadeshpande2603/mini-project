@@ -108,6 +108,42 @@ export const abi =
     "inputs": [
       {
         "internalType": "string",
+        "name": "studentId",
+        "type": "string"
+      }
+    ],
+    "name": "getQuizScores",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "quizId",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "quizName",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "score",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct TimeLockQuestionPaper.QuizScore[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
         "name": "paperId",
         "type": "string"
       },
@@ -233,6 +269,40 @@ export const abi =
         "type": "uint256"
       }
     ],
+    "name": "quizScore",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "quizId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "quizName",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "score",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "name": "quizToStudents",
     "outputs": [
       {
@@ -268,6 +338,34 @@ export const abi =
       }
     ],
     "name": "storePaper",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "quizId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "quizName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "studentId",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "score",
+        "type": "uint256"
+      }
+    ],
+    "name": "storeQuizScore",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

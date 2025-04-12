@@ -136,6 +136,21 @@ describe("getPaper", () => {
         expect(scores[1].score).to.equal(95);
       });
     });
+    describe("storeQuizScore", () => {
+      beforeEach(async () => {
+        await paper.connect(deployer).storeQuizScore("quiz1", "student1", 80);
+        await paper.connect(deployer).storeQuizScore("quiz2", "student1", 95);
+      });
+    
+      it("stores multiple quiz scores for a student", async () => {
+        const scores = await paper.getQuizScores("student1");
+        expect(scores.length).to.equal(2);
+        expect(scores[0].quizId).to.equal("quiz1");
+        expect(scores[0].score).to.equal(80);
+        expect(scores[1].quizId).to.equal("quiz2");
+        expect(scores[1].score).to.equal(95);
+      });
+    });
 
     
   })

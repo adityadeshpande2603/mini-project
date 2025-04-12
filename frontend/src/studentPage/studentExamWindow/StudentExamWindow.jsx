@@ -184,6 +184,22 @@ const StudentExamWindow = () => {
             } catch (error) {
                 console.error("Error posting score:", error);
             }
+            try {
+                await axios.post(
+                    `${backendUrl}/api/auth/rsa/storequizscore`,
+                    {
+                        quizId,
+                        quizName,
+                        studentId: currentUser.id,
+                        score: correctCountTemp,
+                    },
+                    { withCredentials: true }
+                );
+
+                console.log("Score is added to quizScore struct");
+            } catch (error) {
+                console.error("Error posting score:", error);
+            }
 
             alert("Quiz Submitted Successfully!");
             navigate(`/student/result/${quizId}/${currentUser.id}/false`);

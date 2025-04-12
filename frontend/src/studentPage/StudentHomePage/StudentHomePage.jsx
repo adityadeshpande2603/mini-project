@@ -17,13 +17,16 @@ const StudentHomePage = () => {
         const fetchQuizzes = async () => {
             if (!currentUser?.id) return;
             try {
-                const res = await axios.get(
-                    `${backendUrl}/api/auth/student/getstudentbyid?studentId=${currentUser.id}`,
+                const res = await axios.post(
+                    `${backendUrl}/api/auth/rsa/showscore`,
+                    {
+                        studentId:currentUser.id
+                    },
                     { withCredentials: true }
                 );
-                setAttempts(res.data.attempts);
+                setAttempts(res.data);
             } catch (error) {
-                console.error("Error fetching quizzes:", error);
+                console.error("Error fetching quizzes scores:", error);
             }
         };
 
