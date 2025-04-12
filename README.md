@@ -32,9 +32,9 @@ Follow the steps below to set up both the frontend and backend of this project.
 4. Copy and paste the API_Key, API_Secret,PINATA_JWT from PINATA to `./backend/.env` file: 
        
        ```env
-       API_Key=<API_Key> 
-       API_Secret=< API_Secret> 
-       PINATA_JWT=<PINATA_JWT>
+       API_Key=<YOUR_API_Key> 
+       API_Secret=<YOUR_API_Secret> 
+       PINATA_JWT=<YOUR_PINATA_JWT>
        ```
 5. Run tests
      ```sh
@@ -49,7 +49,7 @@ Follow the steps below to set up both the frontend and backend of this project.
 8.  copy the contract address and paste it in `.backend/.env`    file    
 
       ```env
-      CONTRACT_ADDRESS=<CONTRACT_ADDRESS>
+      CONTRACT_ADDRESS=<YOUTR_CONTRACT_ADDRESS>
 
 ## **Backend Setup**  
 
