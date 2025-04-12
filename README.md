@@ -28,13 +28,15 @@ Follow the steps below to set up both the frontend and backend of this project.
        
        ```env
        PRIVATE_KEY=<YOUR_PRIVATE_KEY>
-3. Create account on[PINATA](https://pinata.cloud/) for IPFS 
+3. Create account on [PINATA](https://pinata.cloud/) for IPFS 
 4. Copy and paste the API_Key, API_Secret,PINATA_JWT from PINATA to `./backend/.env` file: 
        
        ```env
        API_Key=<API_Key> 
        API_Secret=<PINATA_JWT> 
        PINATA_JWT=<PINATA_JWT>
+5. Run tests
+  `$ npx hardhat test`       
 
 ## **Backend Setup**   
 
