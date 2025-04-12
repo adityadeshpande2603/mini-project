@@ -36,7 +36,15 @@ Follow the steps below to set up both the frontend and backend of this project.
        API_Secret=<PINATA_JWT> 
        PINATA_JWT=<PINATA_JWT>
 5. Run tests
-  `$ npx hardhat test`       
+     ```sh
+    npx hardhat test 
+
+6. Start Hardhat node
+    ```sh
+    npx hardhat node
+7. Run deployment script
+    ```sh
+    npx hardhat run ./scripts/deploy.js --network localhost         
 
 ## **Backend Setup**   
 
