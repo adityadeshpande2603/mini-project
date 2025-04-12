@@ -53,10 +53,10 @@ Follow the steps below to set up both the frontend and backend of this project.
 
 ## **Backend Setup**  
 
-1. Navigate to `backend/lib/utils/aesAlogo.js` and run following command to create AES algorithm keys
+1. Navigate to `backend/lib/utils` and run following command to create AES algorithm keys
 
    ```sh
-   npx hardhat node
+   node aesAlogo.js
 2. Navigate to the frontend directory and create a `.env` file.
 3. Copy and paste the following environment variables into the `.env` file:
 
