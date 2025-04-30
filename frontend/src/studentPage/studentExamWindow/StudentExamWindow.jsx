@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../lib/authContext/AuthContext";
 import ImagePopup from "../../Components/ImagePopUp/ImagePopup";
 import moment from "moment";
+import { ClipLoader } from "react-spinners";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
 
@@ -24,6 +25,8 @@ const StudentExamWindow = () => {
     const [date, setDate] = useState();
     const [overQuiz, setOverQuiz] = useState(false);
     const [timeLeft, setTimeLeft] = useState("");
+    const [loading, setLoading] = useState(false);
+    
 
     useEffect(() => {
         const fetchDecryptedQuestions = async () => {
@@ -110,7 +113,7 @@ const StudentExamWindow = () => {
 
         try {
 
-
+            setLoading(true);
             let correctCountTemp = 0;
 
             // console.log("res",res);
@@ -206,6 +209,9 @@ const StudentExamWindow = () => {
         } catch (error) {
             console.error("Error submitting quiz:", error);
         }
+        finally{
+            setLoading(false);
+        }
     };
 
     if (!active) {
@@ -228,6 +234,13 @@ const StudentExamWindow = () => {
     const currentQuestion = questions[currentQuestionIndex];
 
     return (
+<div className="w-full  relative">
+        {loading && (
+            
+            <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50">
+            <ClipLoader color="#36d7b7" size={60} />
+          </div>
+           )}
         <div className="exam-container flex flex-col h-screen bg-blue-950 bg-gradient-to-br from-gray-900 to-black text-white">
             <div className="flex justify-between items-center px-6 py-3 bg-gray-800">
                 <h2 className="text-lg font-bold">{quizName}</h2>
@@ -318,6 +331,7 @@ const StudentExamWindow = () => {
                     )}
                 </div>
             </div>
+        </div>
         </div>
     );
 };

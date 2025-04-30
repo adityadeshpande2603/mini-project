@@ -138,8 +138,8 @@ describe("getPaper", () => {
     });
     describe("storeQuizScore", () => {
       beforeEach(async () => {
-        await paper.connect(deployer).storeQuizScore("quiz1", "student1", 80);
-        await paper.connect(deployer).storeQuizScore("quiz2", "student1", 95);
+        await paper.connect(deployer).storeQuizScore("quiz1", "Quiz One", "student1", 80);
+        await paper.connect(deployer).storeQuizScore("quiz2", "Quiz Two", "student1", 95);
       });
     
       it("stores multiple quiz scores for a student", async () => {
