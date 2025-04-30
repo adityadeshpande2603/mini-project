@@ -5,6 +5,7 @@ import { AuthContext } from "../../../lib/authContext/AuthContext";
 import ImagePopup from "../../Components/ImagePopUp/ImagePopup";
 import moment from "moment";
 import { ClipLoader } from "react-spinners";
+import StudentExamWindowSkalaton from "../../Components/StudentExamWindowSkalaton/StudentExamWindowSkalaton";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
 
@@ -26,12 +27,14 @@ const StudentExamWindow = () => {
     const [overQuiz, setOverQuiz] = useState(false);
     const [timeLeft, setTimeLeft] = useState("");
     const [loading, setLoading] = useState(false);
+    const [questionLoading,setQuestionLoading]=useState(false);
     
 
     useEffect(() => {
         const fetchDecryptedQuestions = async () => {
             if (active) {
                 try {
+                    setQuestionLoading(true);
                     const response = await axios.post(
                         `${backendUrl}/api/auth/rsa/decryptpaper`,
                         { quizId },
@@ -49,6 +52,9 @@ const StudentExamWindow = () => {
 
                 } catch (error) {
                     console.error("Failed to decrypt quiz paper:", error);
+                }
+                finally{
+                    setQuestionLoading(false);
                 }
             }
         };
@@ -275,6 +281,7 @@ const StudentExamWindow = () => {
                 <div className="w-3/4 p-6 flex flex-col overflow-auto h-[90vh]">
                     {currentQuestion ? (
                         <>
+                       
                             <h2 className="text-xl font-bold mb-2">Question {currentQuestionIndex + 1}</h2>
                             <p className="mb-4 text-lg">{currentQuestion.question}</p>
 
@@ -327,7 +334,7 @@ const StudentExamWindow = () => {
                             </div>
                         </>
                     ) : (
-                        <p className="text-center text-xl">Loading question...</p>
+                        <StudentExamWindowSkalaton></StudentExamWindowSkalaton>
                     )}
                 </div>
             </div>
