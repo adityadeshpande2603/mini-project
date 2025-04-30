@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import ImagePopup from "../../Components/ImagePopUp/ImagePopup";
+import QuestionSkeleton from "../../Components/QuestionSkeleton/QuestionSkeleton";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL_PRODUCTION || import.meta.env.VITE_BACKEND_URL_LOCAL;
 
@@ -14,74 +15,22 @@ const StudentResult = () => {
     const [score, setScore] = useState(0);
     const [rank, setRank] = useState(0);
     const [quizName, setQuizName] = useState("");
+    const [isLoading,setIsLoading]=useState(false);
 
-    // useEffect(() => {
-    //     const fetchResults = async () => {
-    //         try {
-    //             const quizRes = await axios.get(
-    //                 `${backendUrl}/api/auth/teacher/homepage/getquizbyid?quizId=${quizId}`,
-    //                 { withCredentials: true }
-    //             );
-
-               
-    //             try {
-    //                 const response = await axios.post(
-    //                     `${backendUrl}/api/auth/rsa/studentresult`,
-    //                     { quizId, studentId },
-    //                     { withCredentials: true }
-    //                 );
-
-                   
-
-    //                 //  questions = response.data
-    //                 setQuestions(prev => [response.data]);
-    //                 // setQuestions(response.data);
-    //                 console.log("hhhhhhhhhhh",response.data);
-    //                 //   console.log("questions ",questions)
-
-    //                 const answers = {};
-    //                 response.data.forEach((question) => {
-    //                     answers[question.questionId] = question.correctAnswer;
-    //                 });
-    //                 setCorrectAnswers(answers);
-    //             } catch (error) {
-    //                 console.error("Failed to decrypt quiz paper:", error);
-    //             }
-
-    //             setQuizName(quizRes.data.quizName);
-    //             // setQuestions(quizRes.data.questions || []);
-    //             setScore(attemptRes.data.score);
-
-    //             // Store correct answers
-    //             // const answers = {};
-    //             // quizRes.data.questions.forEach((q) => {
-    //             //     answers[q.id] = q.correctAnswer;
-    //             // });
-    //             // setCorrectAnswers(answers);
-
-    //             // Store student responses
-              
-
-           
-    //             setResponses(studentResponses);
-    //         } catch (error) {
-    //             console.error("Error fetching results:", error);
-    //         }
-    //     };
-
-    //     fetchResults();
-    // }, [quizId]);
+    
 
     useEffect(() => {
         const fetchStudentResult = async () => {
             try {
+
+                setIsLoading(true);
                 const response = await axios.post(
                     `${backendUrl}/api/auth/rsa/studentresult`,
                     { quizId, studentId },
                     { withCredentials: true }
                 );
                 console.log("📦 Student result:", response.data);
-                // handle response data here (e.g. set it in state)
+              
 
                
 
@@ -89,15 +38,12 @@ const StudentResult = () => {
 
                 setQuestions(response.data);
                 console.log("heew")
-                //  let correctQuestions=0;
-                //  questions.forEach((q) => {
-                //     console.log(q);
-                //     if (q.isCorrect) correctQuestions++;
-                // });
-
-                // setScore(correctQuestions)
+                
             } catch (e) {
                 console.error("❌ Error fetching student response:", e);
+            }
+            finally{
+                setIsLoading(false);
             }
         };
     
@@ -134,6 +80,9 @@ const StudentResult = () => {
             </h3> */}
 
             <div className="mt-6 border border-gray-700 p-4 rounded-lg shadow-lg bg-gray-800">
+                {
+                    isLoading && <QuestionSkeleton></QuestionSkeleton>
+                }
                 {questions.map((question, index) => (
                     <div key={question.questionId} className="mb-6 p-4 border-b border-gray-700">
                         <div className="flex flex-wrap gap-4">
